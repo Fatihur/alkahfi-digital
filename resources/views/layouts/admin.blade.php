@@ -23,6 +23,12 @@
         </a>
     </div>
     <div class="nav-item">
+        <a href="{{ route('admin.wali-santri.index') }}" class="nav-link {{ request()->routeIs('admin.wali-santri.*') ? 'active' : '' }}">
+            <i class="bi bi-people-fill"></i>
+            <span>Wali Santri</span>
+        </a>
+    </div>
+    <div class="nav-item">
         <a href="{{ route('admin.kelas.index') }}" class="nav-link {{ request()->routeIs('admin.kelas.*') ? 'active' : '' }}">
             <i class="bi bi-building"></i>
             <span>Kelas</span>

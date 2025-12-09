@@ -42,4 +42,18 @@
             <span>Kegiatan</span>
         </a>
     </div>
+
+    <div class="menu-label">Lainnya</div>
+    <div class="nav-item">
+        <a href="{{ route('wali.notifikasi.index') }}" class="nav-link {{ request()->routeIs('wali.notifikasi.*') ? 'active' : '' }}">
+            <i class="bi bi-bell"></i>
+            <span>Notifikasi</span>
+            @php
+                $unreadCount = \App\Models\Notifikasi::where('user_id', auth()->id())->where('is_read', false)->count();
+            @endphp
+            @if($unreadCount > 0)
+                <span class="badge badge-danger ms-auto">{{ $unreadCount }}</span>
+            @endif
+        </a>
+    </div>
 @endsection

@@ -90,5 +90,8 @@ class DatabaseSeeder extends Seeder
 
         // Call SantriSeeder
         $this->call(SantriSeeder::class);
+
+        // Call TagihanSeeder
+        $this->call(TagihanSeeder::class);
     }
 }

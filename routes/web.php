@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\SantriController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\TagihanController as AdminTagihanController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\WaliSantriController;
 use App\Http\Controllers\Bendahara\DashboardController as BendaharaDashboardController;
 use App\Http\Controllers\Bendahara\TagihanController as BendaharaTagihanController;
 use App\Http\Controllers\Bendahara\PembayaranController as BendaharaPembayaranController;
@@ -24,6 +25,7 @@ use App\Http\Controllers\Bendahara\LaporanController as BendaharaLaporanControll
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\Wali\DashboardController as WaliDashboardController;
 use App\Http\Controllers\Wali\InformasiController;
+use App\Http\Controllers\Wali\NotifikasiController as WaliNotifikasiController;
 use App\Http\Controllers\Wali\PembayaranController as WaliPembayaranController;
 use App\Http\Controllers\Wali\TagihanController as WaliTagihanController;
 use Illuminate\Support\Facades\Route;
@@ -48,6 +50,19 @@ Route::middleware(['auth', 'check.active'])->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
         
         Route::resource('users', UserController::class);
+        
+        // Wali Santri Management
+        Route::get('/wali-santri', [WaliSantriController::class, 'index'])->name('wali-santri.index');
+        Route::get('/wali-santri/create', [WaliSantriController::class, 'create'])->name('wali-santri.create');
+        Route::post('/wali-santri', [WaliSantriController::class, 'store'])->name('wali-santri.store');
+        Route::get('/wali-santri/generate', [WaliSantriController::class, 'showGenerateForm'])->name('wali-santri.generate');
+        Route::post('/wali-santri/generate', [WaliSantriController::class, 'generateAkun'])->name('wali-santri.generate.store');
+        Route::get('/wali-santri/{wali_santri}', [WaliSantriController::class, 'show'])->name('wali-santri.show');
+        Route::get('/wali-santri/{wali_santri}/edit', [WaliSantriController::class, 'edit'])->name('wali-santri.edit');
+        Route::put('/wali-santri/{wali_santri}', [WaliSantriController::class, 'update'])->name('wali-santri.update');
+        Route::delete('/wali-santri/{wali_santri}', [WaliSantriController::class, 'destroy'])->name('wali-santri.destroy');
+        Route::post('/wali-santri/{wali_santri}/reset-password', [WaliSantriController::class, 'resetPassword'])->name('wali-santri.reset-password');
+        
         Route::resource('santri', SantriController::class);
         Route::resource('kelas', KelasController::class);
         Route::resource('angkatan', AngkatanController::class);
@@ -125,5 +140,12 @@ Route::middleware(['auth', 'check.active'])->group(function () {
         Route::get('/jadwal', [InformasiController::class, 'jadwal'])->name('jadwal.index');
         Route::get('/kegiatan', [InformasiController::class, 'kegiatan'])->name('kegiatan.index');
         Route::get('/kegiatan/{kegiatan}', [InformasiController::class, 'showKegiatan'])->name('kegiatan.show');
+        
+        // Notifikasi
+        Route::get('/notifikasi', [WaliNotifikasiController::class, 'index'])->name('notifikasi.index');
+        Route::get('/notifikasi/{notifikasi}', [WaliNotifikasiController::class, 'show'])->name('notifikasi.show');
+        Route::post('/notifikasi/mark-all-read', [WaliNotifikasiController::class, 'markAllAsRead'])->name('notifikasi.mark-all-read');
+        Route::get('/notifikasi-count', [WaliNotifikasiController::class, 'getUnreadCount'])->name('notifikasi.count');
+        Route::get('/notifikasi-latest', [WaliNotifikasiController::class, 'getLatest'])->name('notifikasi.latest');
     });
 });
