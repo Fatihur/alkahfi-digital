@@ -15,7 +15,7 @@
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <a href="#" class="sidebar-logo">
-                <i class="bi bi-mortarboard-fill"></i>
+                <img src="{{ asset('logo-alkahfi.png') }}" alt="Logo" class="sidebar-logo-img">
                 <span class="sidebar-brand">ALKAHFI DIGITAL</span>
             </a>
         </div>
@@ -551,6 +551,13 @@
         
         .btn-group .btn {
             border-radius: 6px;
+        }
+        
+        /* Sidebar Logo Image */
+        .sidebar-logo-img {
+            width: 36px;
+            height: 36px;
+            object-fit: contain;
         }
         
         /* Button Colors */
