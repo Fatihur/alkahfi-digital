@@ -5,7 +5,10 @@
 @section('content')
     <div class="page-header">
         <div><h1 class="page-title">Laporan Transaksi</h1></div>
-        <a href="{{ route('admin.laporan.transaksi', array_merge(request()->all(), ['export' => 'excel'])) }}" class="btn btn-primary"><i class="bi bi-download"></i> Export Excel</a>
+        <div class="btn-group">
+            <a href="{{ route('admin.laporan.transaksi', array_merge(request()->all(), ['export' => 'excel'])) }}" class="btn btn-primary"><i class="bi bi-file-earmark-excel"></i> Export Excel</a>
+            <a href="{{ route('admin.laporan.transaksi', array_merge(request()->all(), ['export' => 'pdf'])) }}" class="btn btn-danger"><i class="bi bi-file-earmark-pdf"></i> Export PDF</a>
+        </div>
     </div>
 
     <div class="card">

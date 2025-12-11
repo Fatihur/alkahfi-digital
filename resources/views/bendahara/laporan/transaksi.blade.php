@@ -8,9 +8,14 @@
             <h1 class="page-title">Laporan Transaksi</h1>
             <p class="page-subtitle">Total: <strong>Rp {{ number_format($totalPembayaran, 0, ',', '.') }}</strong></p>
         </div>
-        <a href="{{ route('bendahara.laporan.transaksi', array_merge(request()->query(), ['export' => 'excel'])) }}" class="btn btn-secondary">
-            <i class="bi bi-download"></i> Export Excel
-        </a>
+        <div class="btn-group">
+            <a href="{{ route('bendahara.laporan.transaksi', array_merge(request()->query(), ['export' => 'excel'])) }}" class="btn btn-primary">
+                <i class="bi bi-file-earmark-excel"></i> Export Excel
+            </a>
+            <a href="{{ route('bendahara.laporan.transaksi', array_merge(request()->query(), ['export' => 'pdf'])) }}" class="btn btn-danger">
+                <i class="bi bi-file-earmark-pdf"></i> Export PDF
+            </a>
+        </div>
     </div>
 
     <div class="card">

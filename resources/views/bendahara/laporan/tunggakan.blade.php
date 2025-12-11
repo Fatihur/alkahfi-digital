@@ -8,6 +8,9 @@
             <h1 class="page-title">Laporan Tunggakan</h1>
             <p class="page-subtitle">Total Tunggakan: <strong class="text-danger">Rp {{ number_format($totalTunggakan, 0, ',', '.') }}</strong></p>
         </div>
+        <a href="{{ route('bendahara.laporan.tunggakan', array_merge(request()->query(), ['export' => 'pdf'])) }}" class="btn btn-danger">
+            <i class="bi bi-file-earmark-pdf"></i> Export PDF
+        </a>
     </div>
 
     <div class="card">

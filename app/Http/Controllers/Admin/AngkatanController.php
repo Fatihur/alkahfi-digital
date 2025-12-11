@@ -11,7 +11,7 @@ class AngkatanController extends Controller
 {
     public function index()
     {
-        $angkatan = Angkatan::withCount('santri')->latest()->paginate(10);
+        $angkatan = Angkatan::withCount('santri')->latest()->get();
         return view('admin.angkatan.index', compact('angkatan'));
     }
 

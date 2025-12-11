@@ -24,7 +24,7 @@ class TagihanController extends Controller
             $query->where('santri_id', $request->santri_id);
         }
 
-        $tagihan = $query->latest()->paginate(10);
+        $tagihan = $query->latest()->get();
         $santriList = $user->waliSantri()->with('santri')->get()->pluck('santri');
 
         return view('wali.tagihan.index', compact('tagihan', 'santriList'));

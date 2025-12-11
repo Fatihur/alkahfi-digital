@@ -21,7 +21,7 @@ class JadwalController extends Controller
             $query->where('jenis', $request->jenis);
         }
 
-        $jadwal = $query->latest()->paginate(10);
+        $jadwal = $query->latest()->get();
 
         return view('admin.jadwal.index', compact('jadwal'));
     }

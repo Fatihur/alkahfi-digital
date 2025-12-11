@@ -22,7 +22,7 @@ class KegiatanController extends Controller
             $query->where('status', $request->status);
         }
 
-        $kegiatan = $query->latest()->paginate(10);
+        $kegiatan = $query->latest()->get();
 
         return view('admin.kegiatan.index', compact('kegiatan'));
     }

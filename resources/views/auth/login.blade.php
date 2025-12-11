@@ -11,41 +11,17 @@
 <body>
     <div class="login-page">
         <div class="login-left">
-            <svg class="login-illustration" viewBox="0 0 500 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="50" y="50" width="400" height="300" rx="20" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
-                <rect x="70" y="80" width="120" height="80" rx="10" fill="rgba(255,255,255,0.15)"/>
-                <rect x="200" y="80" width="120" height="80" rx="10" fill="rgba(255,255,255,0.15)"/>
-                <rect x="330" y="80" width="100" height="80" rx="10" fill="rgba(255,255,255,0.15)"/>
-                <rect x="70" y="180" width="250" height="150" rx="10" fill="rgba(255,255,255,0.1)"/>
-                <rect x="330" y="180" width="100" height="70" rx="10" fill="rgba(255,255,255,0.1)"/>
-                <rect x="330" y="260" width="100" height="70" rx="10" fill="rgba(255,255,255,0.1)"/>
-                <path d="M90 280 L130 250 L170 270 L210 220 L250 240 L290 200" stroke="rgba(255,255,255,0.5)" stroke-width="3" fill="none" stroke-linecap="round"/>
-                <circle cx="90" cy="280" r="5" fill="white"/>
-                <circle cx="130" cy="250" r="5" fill="white"/>
-                <circle cx="170" cy="270" r="5" fill="white"/>
-                <circle cx="210" cy="220" r="5" fill="white"/>
-                <circle cx="250" cy="240" r="5" fill="white"/>
-                <circle cx="290" cy="200" r="5" fill="white"/>
-                <circle cx="130" cy="120" r="20" fill="rgba(255,255,255,0.2)"/>
-                <circle cx="260" cy="120" r="20" fill="rgba(255,255,255,0.2)"/>
-                <circle cx="380" cy="120" r="20" fill="rgba(255,255,255,0.2)"/>
-                <circle cx="30" cy="150" r="15" fill="rgba(255,255,255,0.1)">
-                    <animate attributeName="cy" values="150;130;150" dur="3s" repeatCount="indefinite"/>
-                </circle>
-                <circle cx="470" cy="250" r="20" fill="rgba(255,255,255,0.1)">
-                    <animate attributeName="cy" values="250;270;250" dur="4s" repeatCount="indefinite"/>
-                </circle>
-            </svg>
-            <h2>Selamat Datang di ALKAHFI DIGITAL</h2>
-            <p>Sistem Pembayaran SPP Santri - Kelola pembayaran SPP dengan mudah, cepat, dan transparan.</p>
+            <div class="login-overlay"></div>
+            <div class="login-left-content">
+                <h2>Selamat Datang di ALKAHFI DIGITAL</h2>
+                <p>Sistem Pembayaran SPP Santri - Kelola pembayaran SPP dengan mudah, cepat, dan transparan.</p>
+            </div>
         </div>
 
         <div class="login-right">
             <div class="login-form">
                 <div class="text-center mb-5">
-                    <div class="sidebar-logo d-inline-flex mb-4" style="width: 60px; height: 60px; font-size: 28px;">
-                        <i class="bi bi-mortarboard-fill"></i>
-                    </div>
+                    <img src="{{ asset('logo-alkahfi.png') }}" alt="Logo Al-Kahfi" class="login-logo mb-4">
                     <h1>Masuk</h1>
                     <p class="subtitle">Silakan masukkan email dan password Anda.</p>
                 </div>
@@ -78,34 +54,24 @@
                         </div>
                     </div>
 
-                    <div class="d-flex justify-between align-center mb-4">
-                        <label class="form-check">
-                            <input type="checkbox" name="remember" class="form-check-input">
-                            <span>Ingat saya</span>
-                        </label>
-                    </div>
-
+                    
                     <button type="submit" class="btn btn-primary btn-lg w-100">
                         <i class="bi bi-box-arrow-in-right"></i>
                         Masuk
                     </button>
                 </form>
 
-                <div class="text-center mt-5">
-                    <button class="theme-toggle" id="themeToggle" style="background: var(--border-color);">
-                        <i class="bi bi-moon-fill"></i>
-                    </button>
-                </div>
             </div>
         </div>
     </div>
 
     <style>
         .login-page { display: flex; min-height: 100vh; }
-        .login-left { flex: 1; background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; color: white; }
-        .login-left h2 { font-size: 2rem; margin-top: 40px; margin-bottom: 16px; }
+        .login-left { flex: 1; background: url('{{ asset('login-bg.jpg') }}') center/cover no-repeat; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; color: white; position: relative; }
+        .login-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(79, 70, 229, 0.85) 0%, rgba(124, 58, 237, 0.85) 100%); }
+        .login-left-content { position: relative; z-index: 1; text-align: center; }
+        .login-left h2 { font-size: 2rem; margin-bottom: 16px; }
         .login-left p { opacity: 0.9; text-align: center; max-width: 400px; }
-        .login-illustration { width: 100%; max-width: 400px; }
         .login-right { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px; background: var(--bg-card); }
         .login-form { width: 100%; max-width: 400px; }
         .login-form h1 { font-size: 1.75rem; margin-bottom: 8px; color: var(--text-main); }
@@ -117,6 +83,7 @@
         .mb-5 { margin-bottom: 32px; }
         .mt-5 { margin-top: 32px; }
         .d-inline-flex { display: inline-flex; align-items: center; justify-content: center; background: var(--primary-subtle); border-radius: 12px; color: var(--primary-color); }
+        .login-logo { width: 80px; height: 80px; object-fit: contain; }
         @media (max-width: 768px) { .login-left { display: none; } .login-right { padding: 20px; } }
     </style>
 

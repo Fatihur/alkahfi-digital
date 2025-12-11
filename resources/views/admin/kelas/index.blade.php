@@ -16,19 +16,19 @@
     </div>
 
     <div class="card">
-        <div class="table-responsive">
-            <table class="table">
+        <div class="card-body">
+            <table class="table" id="dataTable" style="width:100%">
                 <thead>
                     <tr>
                         <th>Nama Kelas</th>
                         <th>Tingkat</th>
                         <th>Jumlah Santri</th>
                         <th>Status</th>
-                        <th>Aksi</th>
+                        <th width="100">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($kelas as $k)
+                    @foreach($kelas as $k)
                         <tr>
                             <td>{{ $k->nama_kelas }}</td>
                             <td>{{ $k->tingkat ?? '-' }}</td>
@@ -41,32 +41,36 @@
                                 @endif
                             </td>
                             <td>
-                                <div class="d-flex gap-1">
-                                    <a href="{{ route('admin.kelas.edit', $k) }}" class="btn btn-sm btn-secondary">
+                                <div class="btn-group">
+                                    <a href="{{ route('admin.kelas.edit', $k) }}" class="btn btn-sm btn-secondary" title="Edit">
                                         <i class="bi bi-pencil"></i>
                                     </a>
-                                    <form action="{{ route('admin.kelas.destroy', $k) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus kelas ini?')">
+                                    <form action="{{ route('admin.kelas.destroy', $k) }}" method="POST" style="display:inline" onsubmit="return confirm('Yakin ingin menghapus kelas ini?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger">
+                                        <button type="submit" class="btn btn-sm btn-danger" title="Hapus">
                                             <i class="bi bi-trash"></i>
                                         </button>
                                     </form>
                                 </div>
                             </td>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="text-center text-muted">Tidak ada data kelas</td>
-                        </tr>
-                    @endforelse
+                    @endforeach
                 </tbody>
             </table>
         </div>
-        @if($kelas->hasPages())
-            <div class="card-footer">
-                {{ $kelas->links() }}
-            </div>
-        @endif
     </div>
 @endsection
+
+@push('scripts')
+<script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable({
+            order: [[0, 'asc']],
+            columnDefs: [
+                { orderable: false, targets: -1 }
+            ]
+        });
+    });
+</script>
+@endpush

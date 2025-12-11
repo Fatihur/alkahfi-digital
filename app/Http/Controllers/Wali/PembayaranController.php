@@ -29,7 +29,7 @@ class PembayaranController extends Controller
             $query->where('status', $request->status);
         }
 
-        $pembayaran = $query->latest()->paginate(10);
+        $pembayaran = $query->latest()->get();
 
         return view('wali.pembayaran.index', compact('pembayaran'));
     }

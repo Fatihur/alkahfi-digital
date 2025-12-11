@@ -46,19 +46,8 @@
     @endif
 
     <div class="card">
-        <div class="card-header">
-            <form action="" method="GET" class="d-flex gap-2">
-                <input type="text" name="search" class="form-control" placeholder="Cari nama/email/no HP..." value="{{ request('search') }}" style="width: 250px;">
-                <select name="status" class="form-control form-select" style="width: 150px;">
-                    <option value="">Semua Status</option>
-                    <option value="aktif" {{ request('status') == 'aktif' ? 'selected' : '' }}>Aktif</option>
-                    <option value="nonaktif" {{ request('status') == 'nonaktif' ? 'selected' : '' }}>Nonaktif</option>
-                </select>
-                <button type="submit" class="btn btn-secondary">Filter</button>
-            </form>
-        </div>
-        <div class="table-responsive">
-            <table class="table">
+        <div class="card-body">
+            <table class="table" id="dataTable" style="width:100%">
                 <thead>
                     <tr>
                         <th>Nama Wali</th>
@@ -66,18 +55,18 @@
                         <th>No. HP</th>
                         <th>Santri</th>
                         <th>Status</th>
-                        <th>Aksi</th>
+                        <th width="150">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($waliSantri as $wali)
+                    @foreach($waliSantri as $wali)
                         <tr>
                             <td>{{ $wali->name }}</td>
                             <td>{{ $wali->email }}</td>
                             <td>{{ $wali->no_hp ?? '-' }}</td>
                             <td>
                                 @forelse($wali->waliSantri as $ws)
-                                    <span class="badge badge-info">{{ $ws->santri->nama_lengkap ?? 'N/A' }} ({{ ucfirst($ws->hubungan) }})</span>
+                                    <span class="badge badge-info">{{ $ws->santri->nama_lengkap ?? 'N/A' }}</span>
                                 @empty
                                     <span class="text-muted">-</span>
                                 @endforelse
@@ -90,20 +79,20 @@
                                 @endif
                             </td>
                             <td>
-                                <div class="d-flex gap-1">
+                                <div class="btn-group">
                                     <a href="{{ route('admin.wali-santri.show', $wali) }}" class="btn btn-sm btn-info" title="Detail">
                                         <i class="bi bi-eye"></i>
                                     </a>
                                     <a href="{{ route('admin.wali-santri.edit', $wali) }}" class="btn btn-sm btn-secondary" title="Edit">
                                         <i class="bi bi-pencil"></i>
                                     </a>
-                                    <form action="{{ route('admin.wali-santri.reset-password', $wali) }}" method="POST" onsubmit="return confirm('Reset password wali ini?')">
+                                    <form action="{{ route('admin.wali-santri.reset-password', $wali) }}" method="POST" style="display:inline" onsubmit="return confirm('Reset password wali ini?')">
                                         @csrf
                                         <button type="submit" class="btn btn-sm btn-warning" title="Reset Password">
                                             <i class="bi bi-key"></i>
                                         </button>
                                     </form>
-                                    <form action="{{ route('admin.wali-santri.destroy', $wali) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus wali santri ini?')">
+                                    <form action="{{ route('admin.wali-santri.destroy', $wali) }}" method="POST" style="display:inline" onsubmit="return confirm('Yakin ingin menghapus wali santri ini?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-danger" title="Hapus">
@@ -113,18 +102,22 @@
                                 </div>
                             </td>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="text-center text-muted">Tidak ada data wali santri</td>
-                        </tr>
-                    @endforelse
+                    @endforeach
                 </tbody>
             </table>
         </div>
-        @if($waliSantri->hasPages())
-            <div class="card-footer">
-                {{ $waliSantri->links() }}
-            </div>
-        @endif
     </div>
 @endsection
+
+@push('scripts')
+<script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable({
+            order: [[0, 'asc']],
+            columnDefs: [
+                { orderable: false, targets: -1 }
+            ]
+        });
+    });
+</script>
+@endpush

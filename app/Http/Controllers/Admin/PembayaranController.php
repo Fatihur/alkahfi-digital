@@ -43,7 +43,7 @@ class PembayaranController extends Controller
             $query->whereDate('tanggal_bayar', '<=', $request->tanggal_sampai);
         }
 
-        $pembayaran = $query->latest()->paginate(10);
+        $pembayaran = $query->latest()->get();
 
         return view('admin.pembayaran.index', compact('pembayaran'));
     }

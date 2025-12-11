@@ -5,13 +5,16 @@
 @section('content')
     <div class="page-header">
         <div><h1 class="page-title">Rekapitulasi Bulanan</h1><p class="page-subtitle">Tahun {{ $tahun }}</p></div>
-        <form action="" method="GET" class="d-flex gap-2">
-            <select name="tahun" class="form-control form-select" style="width: 120px;" onchange="this.form.submit()">
-                @for($y = date('Y'); $y >= 2020; $y--)
-                    <option value="{{ $y }}" {{ $tahun == $y ? 'selected' : '' }}>{{ $y }}</option>
-                @endfor
-            </select>
-        </form>
+        <div class="d-flex gap-2 align-items-center">
+            <form action="" method="GET" class="d-flex gap-2">
+                <select name="tahun" class="form-control form-select" style="width: 120px;" onchange="this.form.submit()">
+                    @for($y = date('Y'); $y >= 2020; $y--)
+                        <option value="{{ $y }}" {{ $tahun == $y ? 'selected' : '' }}>{{ $y }}</option>
+                    @endfor
+                </select>
+            </form>
+            <a href="{{ route('admin.laporan.rekapitulasi', array_merge(request()->all(), ['export' => 'pdf'])) }}" class="btn btn-danger"><i class="bi bi-file-earmark-pdf"></i> Export PDF</a>
+        </div>
     </div>
 
     <div class="card">

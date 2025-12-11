@@ -7,6 +7,7 @@
     <title>@yield('title', 'Dashboard') - {{ config('app.name') }}</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     @stack('styles')
 </head>
@@ -325,8 +326,267 @@
                 font-size: 0.8rem;
             }
         }
+        
+        /* DataTables Custom Styling - Override Default */
+        .dataTables_wrapper {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .dataTables_wrapper .dataTables_length,
+        .dataTables_wrapper .dataTables_filter {
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .dataTables_wrapper .dataTables_length label,
+        .dataTables_wrapper .dataTables_filter label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+            font-size: 0.875rem;
+            color: var(--text-main);
+        }
+        
+        .dataTables_wrapper .dataTables_length select {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px 32px 8px 12px;
+            background: var(--bg-card);
+            color: var(--text-main);
+            font-size: 0.875rem;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 12px;
+        }
+        
+        .dataTables_wrapper .dataTables_filter input {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px 14px;
+            background: var(--bg-card);
+            color: var(--text-main);
+            font-size: 0.875rem;
+            min-width: 220px;
+            margin-left: 8px;
+        }
+        
+        .dataTables_wrapper .dataTables_filter input:focus,
+        .dataTables_wrapper .dataTables_length select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+        
+        .dataTables_wrapper .dataTables_info {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            padding-top: 1rem;
+        }
+        
+        .dataTables_wrapper .dataTables_paginate {
+            padding-top: 1rem;
+        }
+        
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            border: 1px solid var(--border-color) !important;
+            border-radius: 6px !important;
+            background: var(--bg-card) !important;
+            color: var(--text-main) !important;
+            padding: 6px 12px !important;
+            margin: 0 3px !important;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover:not(.disabled):not(.current) {
+            background: var(--primary-subtle) !important;
+            border-color: var(--primary-color) !important;
+            color: var(--primary-color) !important;
+        }
+        
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+            background: var(--primary-color) !important;
+            border-color: var(--primary-color) !important;
+            color: white !important;
+        }
+        
+        .dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
+        .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover {
+            background: var(--bg-body) !important;
+            border-color: var(--border-color) !important;
+            color: var(--text-muted) !important;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        
+        /* Table Styling */
+        table.dataTable {
+            border-collapse: separate !important;
+            border-spacing: 0;
+            width: 100% !important;
+        }
+        
+        table.dataTable thead th {
+            background: var(--bg-body) !important;
+            border-bottom: 1px solid var(--border-color) !important;
+            border-top: none !important;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 12px 16px !important;
+            white-space: nowrap;
+        }
+        
+        table.dataTable thead th:first-child {
+            border-radius: 8px 0 0 0;
+        }
+        
+        table.dataTable thead th:last-child {
+            border-radius: 0 8px 0 0;
+        }
+        
+        table.dataTable tbody td {
+            padding: 14px 16px !important;
+            border-bottom: 1px solid var(--border-color) !important;
+            color: var(--text-main);
+            vertical-align: middle;
+        }
+        
+        table.dataTable tbody tr:hover {
+            background-color: var(--bg-body) !important;
+        }
+        
+        table.dataTable tbody tr:last-child td {
+            border-bottom: none !important;
+        }
+        
+        table.dataTable.no-footer {
+            border-bottom: none !important;
+        }
+        
+        /* Sorting Icons */
+        table.dataTable thead .sorting,
+        table.dataTable thead .sorting_asc,
+        table.dataTable thead .sorting_desc {
+            cursor: pointer;
+            position: relative;
+            padding-right: 26px !important;
+        }
+        
+        table.dataTable thead .sorting:before,
+        table.dataTable thead .sorting:after,
+        table.dataTable thead .sorting_asc:before,
+        table.dataTable thead .sorting_asc:after,
+        table.dataTable thead .sorting_desc:before,
+        table.dataTable thead .sorting_desc:after {
+            position: absolute;
+            right: 8px;
+            font-size: 0.65rem;
+            opacity: 0.3;
+        }
+        
+        table.dataTable thead .sorting:before,
+        table.dataTable thead .sorting_asc:before,
+        table.dataTable thead .sorting_desc:before {
+            content: "▲";
+            top: 50%;
+            transform: translateY(-80%);
+        }
+        
+        table.dataTable thead .sorting:after,
+        table.dataTable thead .sorting_asc:after,
+        table.dataTable thead .sorting_desc:after {
+            content: "▼";
+            top: 50%;
+            transform: translateY(20%);
+        }
+        
+        table.dataTable thead .sorting_asc:before {
+            opacity: 1;
+            color: var(--primary-color);
+        }
+        
+        table.dataTable thead .sorting_desc:after {
+            opacity: 1;
+            color: var(--primary-color);
+        }
+        
+        /* Dark mode support */
+        [data-theme="dark"] .dataTables_wrapper .dataTables_length select,
+        [data-theme="dark"] .dataTables_wrapper .dataTables_filter input {
+            background: var(--bg-card);
+            color: var(--text-main);
+            border-color: var(--border-color);
+        }
+        
+        [data-theme="dark"] table.dataTable thead th {
+            background: var(--bg-body) !important;
+            color: var(--text-muted);
+        }
+        
+        [data-theme="dark"] table.dataTable tbody td {
+            color: var(--text-main);
+        }
+        
+        [data-theme="dark"] .dataTables_wrapper .dataTables_paginate .paginate_button {
+            background: var(--bg-card) !important;
+            color: var(--text-main) !important;
+            border-color: var(--border-color) !important;
+        }
+        
+        /* Button Group */
+        .btn-group {
+            display: inline-flex;
+            gap: 4px;
+        }
+        
+        .btn-group .btn {
+            border-radius: 6px;
+        }
+        
+        /* Button Colors */
+        .btn-info {
+            background: var(--info-color);
+            color: white;
+            border: none;
+        }
+        
+        .btn-info:hover {
+            background: #0284c7;
+        }
+        
+        .btn-warning {
+            background: var(--warning-color);
+            color: white;
+            border: none;
+        }
+        
+        .btn-warning:hover {
+            background: #d97706;
+        }
+        
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+            border: none;
+        }
+        
+        .btn-success:hover {
+            background: #059669;
+        }
     </style>
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     <script src="{{ asset('js/script.js') }}"></script>
     <script>
         function toggleNotificationDropdown() {
@@ -341,6 +601,28 @@
             if (dropdown && menu && !dropdown.contains(e.target)) {
                 menu.classList.remove('show');
             }
+        });
+
+        // DataTables default configuration
+        $.extend(true, $.fn.dataTable.defaults, {
+            language: {
+                search: "Cari:",
+                lengthMenu: "Tampilkan _MENU_ data",
+                info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+                infoEmpty: "Tidak ada data",
+                infoFiltered: "(disaring dari _MAX_ total data)",
+                zeroRecords: "Tidak ada data yang cocok",
+                emptyTable: "Tidak ada data tersedia",
+                paginate: {
+                    first: "Pertama",
+                    last: "Terakhir",
+                    next: "Selanjutnya",
+                    previous: "Sebelumnya"
+                }
+            },
+            responsive: true,
+            pageLength: 10,
+            lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Semua"]]
         });
     </script>
     @stack('scripts')

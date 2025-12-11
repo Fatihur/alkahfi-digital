@@ -8,6 +8,9 @@
             <h1 class="page-title">Rekapitulasi Bulanan</h1>
             <p class="page-subtitle">Tahun {{ $tahun }}</p>
         </div>
+        <a href="{{ route('bendahara.laporan.rekapitulasi', array_merge(request()->query(), ['export' => 'pdf'])) }}" class="btn btn-danger">
+            <i class="bi bi-file-earmark-pdf"></i> Export PDF
+        </a>
     </div>
 
     <div class="card">

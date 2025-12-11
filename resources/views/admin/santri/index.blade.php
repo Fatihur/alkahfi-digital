@@ -16,27 +16,8 @@
     </div>
 
     <div class="card">
-        <div class="card-header">
-            <form action="" method="GET" class="d-flex gap-2">
-                <input type="text" name="search" class="form-control" placeholder="Cari nama/NIS..." value="{{ request('search') }}" style="width: 200px;">
-                <select name="kelas_id" class="form-control form-select" style="width: 150px;">
-                    <option value="">Semua Kelas</option>
-                    @foreach($kelasList as $kelas)
-                        <option value="{{ $kelas->id }}" {{ request('kelas_id') == $kelas->id ? 'selected' : '' }}>{{ $kelas->nama_kelas }}</option>
-                    @endforeach
-                </select>
-                <select name="status" class="form-control form-select" style="width: 120px;">
-                    <option value="">Semua Status</option>
-                    <option value="aktif" {{ request('status') == 'aktif' ? 'selected' : '' }}>Aktif</option>
-                    <option value="nonaktif" {{ request('status') == 'nonaktif' ? 'selected' : '' }}>Nonaktif</option>
-                    <option value="lulus" {{ request('status') == 'lulus' ? 'selected' : '' }}>Lulus</option>
-                    <option value="pindah" {{ request('status') == 'pindah' ? 'selected' : '' }}>Pindah</option>
-                </select>
-                <button type="submit" class="btn btn-secondary">Filter</button>
-            </form>
-        </div>
-        <div class="table-responsive">
-            <table class="table">
+        <div class="card-body">
+            <table class="table" id="dataTable" style="width:100%">
                 <thead>
                     <tr>
                         <th>NIS</th>
@@ -44,11 +25,11 @@
                         <th>Kelas</th>
                         <th>Angkatan</th>
                         <th>Status</th>
-                        <th>Aksi</th>
+                        <th width="120">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($santri as $s)
+                    @foreach($santri as $s)
                         <tr>
                             <td>{{ $s->nis }}</td>
                             <td>{{ $s->nama_lengkap }}</td>
@@ -71,35 +52,39 @@
                                 @endswitch
                             </td>
                             <td>
-                                <div class="d-flex gap-1">
-                                    <a href="{{ route('admin.santri.show', $s) }}" class="btn btn-sm btn-secondary">
+                                <div class="btn-group">
+                                    <a href="{{ route('admin.santri.show', $s) }}" class="btn btn-sm btn-info" title="Detail">
                                         <i class="bi bi-eye"></i>
                                     </a>
-                                    <a href="{{ route('admin.santri.edit', $s) }}" class="btn btn-sm btn-secondary">
+                                    <a href="{{ route('admin.santri.edit', $s) }}" class="btn btn-sm btn-secondary" title="Edit">
                                         <i class="bi bi-pencil"></i>
                                     </a>
-                                    <form action="{{ route('admin.santri.destroy', $s) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus santri ini?')">
+                                    <form action="{{ route('admin.santri.destroy', $s) }}" method="POST" style="display:inline" onsubmit="return confirm('Yakin ingin menghapus santri ini?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger">
+                                        <button type="submit" class="btn btn-sm btn-danger" title="Hapus">
                                             <i class="bi bi-trash"></i>
                                         </button>
                                     </form>
                                 </div>
                             </td>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="text-center text-muted">Tidak ada data santri</td>
-                        </tr>
-                    @endforelse
+                    @endforeach
                 </tbody>
             </table>
         </div>
-        @if($santri->hasPages())
-            <div class="card-footer">
-                {{ $santri->links() }}
-            </div>
-        @endif
     </div>
 @endsection
+
+@push('scripts')
+<script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable({
+            order: [[1, 'asc']],
+            columnDefs: [
+                { orderable: false, targets: -1 }
+            ]
+        });
+    });
+</script>
+@endpush

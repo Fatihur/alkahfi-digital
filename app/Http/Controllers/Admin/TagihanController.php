@@ -37,7 +37,7 @@ class TagihanController extends Controller
             $query->where('tahun', $request->tahun);
         }
 
-        $tagihan = $query->latest()->paginate(10);
+        $tagihan = $query->latest()->get();
 
         return view('admin.tagihan.index', compact('tagihan'));
     }

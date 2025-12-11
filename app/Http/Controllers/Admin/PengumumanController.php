@@ -18,7 +18,7 @@ class PengumumanController extends Controller
             $query->where('judul', 'like', "%{$request->search}%");
         }
 
-        $pengumuman = $query->latest()->paginate(10);
+        $pengumuman = $query->latest()->get();
 
         return view('admin.pengumuman.index', compact('pengumuman'));
     }

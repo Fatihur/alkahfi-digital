@@ -33,7 +33,7 @@ class WaliSantriController extends Controller
             $query->where('is_active', $request->status === 'aktif');
         }
 
-        $waliSantri = $query->latest()->paginate(10)->withQueryString();
+        $waliSantri = $query->latest()->get();
 
         return view('admin.wali-santri.index', compact('waliSantri'));
     }

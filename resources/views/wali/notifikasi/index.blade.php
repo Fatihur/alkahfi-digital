@@ -21,68 +21,77 @@
     </div>
 
     <div class="card">
-        <div class="card-body p-0">
-            @forelse($notifikasi as $item)
-                <a href="{{ route('wali.notifikasi.show', $item) }}" class="notifikasi-item d-block {{ !$item->is_read ? 'unread' : '' }}">
-                    <div class="d-flex align-items-start gap-3 p-3 border-bottom">
-                        <div class="notifikasi-icon">
-                            @if($item->tipe == 'tagihan')
-                                <i class="bi bi-receipt text-warning"></i>
-                            @elseif($item->tipe == 'pembayaran')
-                                <i class="bi bi-check-circle text-success"></i>
-                            @elseif($item->tipe == 'pengumuman')
-                                <i class="bi bi-megaphone text-primary"></i>
-                            @else
-                                <i class="bi bi-info-circle text-info"></i>
-                            @endif
-                        </div>
-                        <div class="flex-grow-1">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <h6 class="mb-1 {{ !$item->is_read ? 'fw-bold' : '' }}">{{ $item->judul }}</h6>
-                                <small class="text-muted">{{ $item->created_at->diffForHumans() }}</small>
-                            </div>
-                            <p class="mb-0 text-muted small">{{ Str::limit($item->pesan, 100) }}</p>
-                        </div>
-                        @if(!$item->is_read)
-                            <span class="badge badge-primary">Baru</span>
-                        @endif
-                    </div>
-                </a>
-            @empty
-                <div class="text-center py-5 text-muted">
-                    <i class="bi bi-bell-slash fs-1"></i>
-                    <p class="mt-2">Tidak ada notifikasi</p>
-                </div>
-            @endforelse
+        <div class="card-body">
+            <table class="table" id="dataTable" style="width:100%">
+                <thead>
+                    <tr>
+                        <th width="50">Tipe</th>
+                        <th>Judul</th>
+                        <th>Pesan</th>
+                        <th>Waktu</th>
+                        <th>Status</th>
+                        <th width="80">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($notifikasi as $item)
+                        <tr class="{{ !$item->is_read ? 'table-primary' : '' }}">
+                            <td>
+                                @if($item->tipe == 'tagihan')
+                                    <i class="bi bi-receipt text-warning fs-5"></i>
+                                @elseif($item->tipe == 'pembayaran')
+                                    <i class="bi bi-check-circle text-success fs-5"></i>
+                                @elseif($item->tipe == 'pengumuman')
+                                    <i class="bi bi-megaphone text-primary fs-5"></i>
+                                @else
+                                    <i class="bi bi-info-circle text-info fs-5"></i>
+                                @endif
+                            </td>
+                            <td>
+                                <strong class="{{ !$item->is_read ? 'fw-bold' : '' }}">{{ $item->judul }}</strong>
+                            </td>
+                            <td>{{ Str::limit($item->pesan, 50) }}</td>
+                            <td data-order="{{ $item->created_at->format('Y-m-d H:i:s') }}">
+                                {{ $item->created_at->diffForHumans() }}
+                            </td>
+                            <td>
+                                @if(!$item->is_read)
+                                    <span class="badge badge-primary">Baru</span>
+                                @else
+                                    <span class="badge badge-secondary">Dibaca</span>
+                                @endif
+                            </td>
+                            <td>
+                                <a href="{{ route('wali.notifikasi.show', $item) }}" class="btn btn-sm btn-primary" title="Lihat">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
-        @if($notifikasi->hasPages())
-            <div class="card-footer">
-                {{ $notifikasi->links() }}
-            </div>
-        @endif
     </div>
 
     <style>
-        .notifikasi-item {
-            text-decoration: none;
-            color: inherit;
-            transition: background-color 0.2s;
+        .table-primary {
+            background-color: var(--primary-subtle) !important;
         }
-        .notifikasi-item:hover {
-            background-color: var(--bg-body);
-        }
-        .notifikasi-item.unread {
-            background-color: var(--primary-subtle);
-        }
-        .notifikasi-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--bg-body);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
+        .fs-5 {
+            font-size: 1.25rem;
         }
     </style>
 @endsection
+
+@push('scripts')
+<script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable({
+            order: [[3, 'desc']],
+            columnDefs: [
+                { orderable: false, targets: [0, -1] }
+            ]
+        });
+    });
+</script>
+@endpush

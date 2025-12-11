@@ -34,7 +34,7 @@ class SantriController extends Controller
             $query->where('status', $request->status);
         }
 
-        $santri = $query->latest()->paginate(10);
+        $santri = $query->latest()->get();
         $kelasList = Kelas::where('is_active', true)->get();
 
         return view('admin.santri.index', compact('santri', 'kelasList'));

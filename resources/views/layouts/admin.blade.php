@@ -43,18 +43,6 @@
 
     <div class="menu-label">Keuangan</div>
     <div class="nav-item">
-        <a href="{{ route('admin.tagihan.index') }}" class="nav-link {{ request()->routeIs('admin.tagihan.*') ? 'active' : '' }}">
-            <i class="bi bi-receipt"></i>
-            <span>Tagihan</span>
-        </a>
-    </div>
-    <div class="nav-item">
-        <a href="{{ route('admin.pembayaran.index') }}" class="nav-link {{ request()->routeIs('admin.pembayaran.*') ? 'active' : '' }}">
-            <i class="bi bi-credit-card"></i>
-            <span>Pembayaran</span>
-        </a>
-    </div>
-    <div class="nav-item">
         <a href="{{ route('admin.laporan.index') }}" class="nav-link {{ request()->routeIs('admin.laporan.*') ? 'active' : '' }}">
             <i class="bi bi-file-earmark-bar-graph"></i>
             <span>Laporan</span>

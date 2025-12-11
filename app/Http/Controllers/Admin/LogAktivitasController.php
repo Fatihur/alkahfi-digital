@@ -24,7 +24,7 @@ class LogAktivitasController extends Controller
             $query->where('user_id', $request->user_id);
         }
 
-        $logs = $query->latest()->paginate(20);
+        $logs = $query->latest()->get();
         $modulList = LogAktivitas::distinct()->pluck('modul')->filter();
 
         return view('admin.log-aktivitas.index', compact('logs', 'modulList'));

@@ -12,7 +12,7 @@ class NotifikasiController extends Controller
     {
         $notifikasi = Notifikasi::where('user_id', auth()->id())
             ->latest()
-            ->paginate(20);
+            ->get();
 
         return view('wali.notifikasi.index', compact('notifikasi'));
     }

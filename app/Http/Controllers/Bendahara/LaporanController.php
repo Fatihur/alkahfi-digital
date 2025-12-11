@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Bendahara;
 use App\Http\Controllers\Controller;
 use App\Models\Pembayaran;
 use App\Models\Tagihan;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class LaporanController extends Controller
@@ -36,8 +37,13 @@ class LaporanController extends Controller
         $pembayaran = $query->latest('tanggal_bayar')->get();
         $totalPembayaran = $pembayaran->sum('jumlah_bayar');
 
-        if ($request->filled('export') && $request->export === 'excel') {
-            return $this->exportTransaksiExcel($pembayaran);
+        if ($request->filled('export')) {
+            if ($request->export === 'excel') {
+                return $this->exportTransaksiExcel($pembayaran);
+            }
+            if ($request->export === 'pdf') {
+                return $this->exportTransaksiPdf($pembayaran, $totalPembayaran, $request);
+            }
         }
 
         return view('bendahara.laporan.transaksi', compact('pembayaran', 'totalPembayaran'));
@@ -65,6 +71,10 @@ class LaporanController extends Controller
         $tagihan = $query->orderBy('tanggal_jatuh_tempo')->get();
         $totalTunggakan = $tagihan->sum('total_bayar');
 
+        if ($request->filled('export') && $request->export === 'pdf') {
+            return $this->exportTunggakanPdf($tagihan, $totalTunggakan);
+        }
+
         return view('bendahara.laporan.tunggakan', compact('tagihan', 'totalTunggakan'));
     }
 
@@ -89,6 +99,10 @@ class LaporanController extends Controller
                 'total_pembayaran' => $totalPembayaran,
                 'selisih' => $totalTagihan - $totalPembayaran,
             ];
+        }
+
+        if ($request->filled('export') && $request->export === 'pdf') {
+            return $this->exportRekapitulasiPdf($rekapBulanan, $tahun);
         }
 
         return view('bendahara.laporan.rekapitulasi', compact('rekapBulanan', 'tahun'));
@@ -134,5 +148,32 @@ class LaporanController extends Controller
         };
 
         return response()->stream($callback, 200, $headers);
+    }
+
+    protected function exportTransaksiPdf($pembayaran, $totalPembayaran, $request)
+    {
+        $tanggalDari = $request->tanggal_dari ? date('d/m/Y', strtotime($request->tanggal_dari)) : '-';
+        $tanggalSampai = $request->tanggal_sampai ? date('d/m/Y', strtotime($request->tanggal_sampai)) : '-';
+
+        $pdf = Pdf::loadView('admin.laporan.pdf.transaksi', compact('pembayaran', 'totalPembayaran', 'tanggalDari', 'tanggalSampai'));
+        $pdf->setPaper('a4', 'landscape');
+
+        return $pdf->download('laporan_transaksi_' . date('Y-m-d_His') . '.pdf');
+    }
+
+    protected function exportTunggakanPdf($tagihan, $totalTunggakan)
+    {
+        $pdf = Pdf::loadView('admin.laporan.pdf.tunggakan', compact('tagihan', 'totalTunggakan'));
+        $pdf->setPaper('a4', 'landscape');
+
+        return $pdf->download('laporan_tunggakan_' . date('Y-m-d_His') . '.pdf');
+    }
+
+    protected function exportRekapitulasiPdf($rekapBulanan, $tahun)
+    {
+        $pdf = Pdf::loadView('admin.laporan.pdf.rekapitulasi', compact('rekapBulanan', 'tahun'));
+        $pdf->setPaper('a4', 'portrait');
+
+        return $pdf->download('laporan_rekapitulasi_' . $tahun . '_' . date('Y-m-d_His') . '.pdf');
     }
 }

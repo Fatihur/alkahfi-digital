@@ -23,7 +23,7 @@ class BeritaController extends Controller
             $query->where('kategori', $request->kategori);
         }
 
-        $berita = $query->latest()->paginate(10)->withQueryString();
+        $berita = $query->latest()->get();
 
         return view('admin.landing.berita.index', compact('berita'));
     }

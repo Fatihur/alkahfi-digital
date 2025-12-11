@@ -22,7 +22,7 @@ class GaleriController extends Controller
             $query->where('kategori', $request->kategori);
         }
 
-        $galeri = $query->orderBy('urutan')->paginate(12)->withQueryString();
+        $galeri = $query->orderBy('urutan')->get();
 
         return view('admin.landing.galeri.index', compact('galeri'));
     }
