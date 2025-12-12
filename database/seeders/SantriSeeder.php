@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Angkatan;
 use App\Models\Kelas;
 use App\Models\Santri;
 use App\Models\User;
@@ -15,10 +14,9 @@ class SantriSeeder extends Seeder
     public function run(): void
     {
         $kelasList = Kelas::all();
-        $angkatanList = Angkatan::all();
 
-        if ($kelasList->isEmpty() || $angkatanList->isEmpty()) {
-            $this->command->warn('Kelas atau Angkatan belum tersedia. Jalankan DatabaseSeeder terlebih dahulu.');
+        if ($kelasList->isEmpty()) {
+            $this->command->warn('Kelas belum tersedia. Jalankan DatabaseSeeder terlebih dahulu.');
             return;
         }
 
@@ -48,15 +46,8 @@ class SantriSeeder extends Seeder
                 'is_active' => true,
             ]);
 
-            // Assign kelas and angkatan based on NIS year
-            $tahunMasuk = substr($data['nis'], 0, 4);
+            // Assign kelas based on index
             $kelasIndex = $index % $kelasList->count();
-            $angkatanIndex = match ($tahunMasuk) {
-                '2024' => 0,
-                '2023' => 1,
-                '2022' => 2,
-                default => 0,
-            };
 
             // Create santri
             $santri = Santri::create([
@@ -67,7 +58,6 @@ class SantriSeeder extends Seeder
                 'tanggal_lahir' => $data['tanggal_lahir'],
                 'alamat' => $data['alamat'],
                 'kelas_id' => $kelasList[$kelasIndex]->id,
-                'angkatan_id' => $angkatanList[$angkatanIndex]->id ?? $angkatanList->first()->id,
                 'tanggal_masuk' => now(),
                 'status' => 'aktif',
             ]);

@@ -34,12 +34,6 @@
             <span>Kelas</span>
         </a>
     </div>
-    <div class="nav-item">
-        <a href="{{ route('admin.angkatan.index') }}" class="nav-link {{ request()->routeIs('admin.angkatan.*') ? 'active' : '' }}">
-            <i class="bi bi-calendar-range"></i>
-            <span>Angkatan</span>
-        </a>
-    </div>
 
     <div class="menu-label">Keuangan</div>
     <div class="nav-item">

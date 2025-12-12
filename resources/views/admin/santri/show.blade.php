@@ -30,7 +30,6 @@
                         <tr><td><strong>Tempat, Tgl Lahir</strong></td><td>{{ $santri->tempat_lahir }}, {{ $santri->tanggal_lahir?->format('d/m/Y') ?? '-' }}</td></tr>
                         <tr><td><strong>Alamat</strong></td><td>{{ $santri->alamat ?? '-' }}</td></tr>
                         <tr><td><strong>Kelas</strong></td><td>{{ $santri->kelas->nama_kelas }}</td></tr>
-                        <tr><td><strong>Angkatan</strong></td><td>{{ $santri->angkatan->tahun_angkatan }}</td></tr>
                         <tr><td><strong>Tanggal Masuk</strong></td><td>{{ $santri->tanggal_masuk?->format('d/m/Y') ?? '-' }}</td></tr>
                         <tr><td><strong>Status</strong></td><td><span class="badge badge-{{ $santri->status == 'aktif' ? 'success' : 'secondary' }}">{{ ucfirst($santri->status) }}</span></td></tr>
                     </table>

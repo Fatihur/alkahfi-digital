@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Angkatan;
 use App\Models\Kelas;
 use App\Models\LogAktivitas;
 use App\Models\Santri;
@@ -16,7 +15,7 @@ class SantriController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Santri::with(['kelas', 'angkatan']);
+        $query = Santri::with(['kelas']);
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -43,10 +42,9 @@ class SantriController extends Controller
     public function create()
     {
         $kelasList = Kelas::where('is_active', true)->get();
-        $angkatanList = Angkatan::where('is_active', true)->get();
         $waliList = User::where('role', 'wali_santri')->where('is_active', true)->get();
 
-        return view('admin.santri.create', compact('kelasList', 'angkatanList', 'waliList'));
+        return view('admin.santri.create', compact('kelasList', 'waliList'));
     }
 
     public function store(Request $request)
@@ -59,7 +57,6 @@ class SantriController extends Controller
             'tanggal_lahir' => ['nullable', 'date'],
             'alamat' => ['nullable', 'string'],
             'kelas_id' => ['required', 'exists:kelas,id'],
-            'angkatan_id' => ['required', 'exists:angkatan,id'],
             'tanggal_masuk' => ['nullable', 'date'],
             'foto' => ['nullable', 'image', 'max:2048'],
             'status' => ['required', 'in:aktif,nonaktif,lulus,pindah'],
@@ -90,18 +87,17 @@ class SantriController extends Controller
 
     public function show(Santri $santri)
     {
-        $santri->load(['kelas', 'angkatan', 'wali', 'tagihan', 'pembayaran']);
+        $santri->load(['kelas', 'wali', 'tagihan', 'pembayaran']);
         return view('admin.santri.show', compact('santri'));
     }
 
     public function edit(Santri $santri)
     {
         $kelasList = Kelas::where('is_active', true)->get();
-        $angkatanList = Angkatan::where('is_active', true)->get();
         $waliList = User::where('role', 'wali_santri')->where('is_active', true)->get();
         $santri->load('wali');
 
-        return view('admin.santri.edit', compact('santri', 'kelasList', 'angkatanList', 'waliList'));
+        return view('admin.santri.edit', compact('santri', 'kelasList', 'waliList'));
     }
 
     public function update(Request $request, Santri $santri)
@@ -114,7 +110,6 @@ class SantriController extends Controller
             'tanggal_lahir' => ['nullable', 'date'],
             'alamat' => ['nullable', 'string'],
             'kelas_id' => ['required', 'exists:kelas,id'],
-            'angkatan_id' => ['required', 'exists:angkatan,id'],
             'tanggal_masuk' => ['nullable', 'date'],
             'foto' => ['nullable', 'image', 'max:2048'],
             'status' => ['required', 'in:aktif,nonaktif,lulus,pindah'],

@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Angkatan;
 use App\Models\KategoriTagihan;
 use App\Models\Kelas;
 use App\Models\Pengaturan;
@@ -48,17 +47,6 @@ class DatabaseSeeder extends Seeder
             Kelas::create([
                 'nama_kelas' => $namaKelas,
                 'tingkat' => explode(' ', $namaKelas)[0],
-                'is_active' => true,
-            ]);
-        }
-
-        // Create Angkatan
-        $tahunSekarang = date('Y');
-        for ($i = 0; $i < 3; $i++) {
-            $tahun = $tahunSekarang - $i;
-            Angkatan::create([
-                'tahun_angkatan' => $tahun . '/' . ($tahun + 1),
-                'nama_angkatan' => 'Angkatan ' . $tahun,
                 'is_active' => true,
             ]);
         }

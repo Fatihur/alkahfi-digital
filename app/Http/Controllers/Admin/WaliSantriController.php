@@ -115,7 +115,7 @@ class WaliSantriController extends Controller
 
     public function show(User $wali_santri)
     {
-        $wali_santri->load(['waliSantri.santri.kelas', 'waliSantri.santri.angkatan']);
+        $wali_santri->load(['waliSantri.santri.kelas']);
         
         return view('admin.wali-santri.show', compact('wali_santri'));
     }
@@ -275,7 +275,7 @@ class WaliSantriController extends Controller
     {
         $santriTanpaWali = Santri::whereDoesntHave('waliSantri')
             ->where('status', 'aktif')
-            ->with(['kelas', 'angkatan'])
+            ->with(['kelas'])
             ->orderBy('nama_lengkap')
             ->get();
 

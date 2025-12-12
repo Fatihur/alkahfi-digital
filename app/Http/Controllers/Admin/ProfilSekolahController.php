@@ -25,7 +25,7 @@ class ProfilSekolahController extends Controller
             'alamat' => ['required', 'string'],
             'telepon' => ['nullable', 'string', 'max:20'],
             'email' => ['nullable', 'email', 'max:255'],
-            'website' => ['nullable', 'url', 'max:255'],
+            'website' => ['nullable', 'max:255'],
             'visi' => ['nullable', 'string'],
             'misi' => ['nullable', 'string'],
             'sejarah' => ['nullable', 'string'],
@@ -35,10 +35,10 @@ class ProfilSekolahController extends Controller
             'foto_kepala_sekolah' => ['nullable', 'image', 'max:2048'],
             'kata_sambutan' => ['nullable', 'string'],
             'maps_embed' => ['nullable', 'string'],
-            'facebook' => ['nullable', 'url'],
-            'instagram' => ['nullable', 'url'],
-            'youtube' => ['nullable', 'url'],
-            'twitter' => ['nullable', 'url'],
+            'facebook' => ['nullable', 'string'],
+            'instagram' => ['nullable', 'string'],
+            'youtube' => ['nullable', 'string'],
+            'twitter' => ['nullable', 'string'],
         ]);
 
         $profil = ProfilSekolah::first() ?? new ProfilSekolah();

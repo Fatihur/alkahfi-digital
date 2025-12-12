@@ -23,7 +23,6 @@
                         <th>NIS</th>
                         <th>Nama Lengkap</th>
                         <th>Kelas</th>
-                        <th>Angkatan</th>
                         <th>Status</th>
                         <th width="120">Aksi</th>
                     </tr>
@@ -34,7 +33,6 @@
                             <td>{{ $s->nis }}</td>
                             <td>{{ $s->nama_lengkap }}</td>
                             <td>{{ $s->kelas->nama_kelas }}</td>
-                            <td>{{ $s->angkatan->tahun_angkatan }}</td>
                             <td>
                                 @switch($s->status)
                                     @case('aktif')

@@ -21,12 +21,7 @@
                                     @if($slider->deskripsi)
                                         <p class="fs-5 text-white mb-4 pb-2">{{ $slider->deskripsi }}</p>
                                     @endif
-                                    <a href="{{ route('landing.profil') }}" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Profil Sekolah</a>
-                                    @if($slider->link)
-                                        <a href="{{ $slider->link }}" class="btn btn-light py-md-3 px-md-5 animated slideInRight">Selengkapnya</a>
-                                    @else
-                                        <a href="{{ route('login') }}" class="btn btn-light py-md-3 px-md-5 animated slideInRight">Login</a>
-                                    @endif
+
                                 </div>
                             </div>
                         </div>
@@ -43,8 +38,7 @@
                                     <h5 class="text-primary text-uppercase mb-3 animated slideInDown">Selamat Datang</h5>
                                     <h1 class="display-3 text-white animated slideInDown">{{ $profil->nama_sekolah ?? 'Sekolah Kami' }}</h1>
                                     <p class="fs-5 text-white mb-4 pb-2">{{ Str::limit($profil->visi ?? 'Mewujudkan generasi yang berilmu, berakhlak, dan berprestasi', 150) }}</p>
-                                    <a href="{{ route('landing.profil') }}" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Profil Sekolah</a>
-                                    <a href="{{ route('login') }}" class="btn btn-light py-md-3 px-md-5 animated slideInRight">Login</a>
+
                                 </div>
                             </div>
                         </div>
@@ -109,7 +103,7 @@
                         @if($profil->foto_gedung ?? false)
                             <img class="img-fluid position-absolute w-100 h-100" src="{{ Storage::url($profil->foto_gedung) }}" alt="Gedung Sekolah" style="object-fit: cover;">
                         @else
-                            <img class="img-fluid position-absolute w-100 h-100" src="{{ asset('landing/img/about.jpg') }}" alt="" style="object-fit: cover;">
+                            <img class="img-fluid position-absolute w-100 h-100" src="{{ asset('landing/img/depan.jpg') }}" alt="" style="object-fit: cover;">
                         @endif
                     </div>
                 </div>

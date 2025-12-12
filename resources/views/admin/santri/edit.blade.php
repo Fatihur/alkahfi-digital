@@ -63,27 +63,13 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label class="form-label">Kelas <span class="text-danger">*</span></label>
-                            <select name="kelas_id" class="form-control form-select" required>
-                                @foreach($kelasList as $kelas)
-                                    <option value="{{ $kelas->id }}" {{ old('kelas_id', $santri->kelas_id) == $kelas->id ? 'selected' : '' }}>{{ $kelas->nama_kelas }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label class="form-label">Angkatan <span class="text-danger">*</span></label>
-                            <select name="angkatan_id" class="form-control form-select" required>
-                                @foreach($angkatanList as $angkatan)
-                                    <option value="{{ $angkatan->id }}" {{ old('angkatan_id', $santri->angkatan_id) == $angkatan->id ? 'selected' : '' }}>{{ $angkatan->tahun_angkatan }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
+                <div class="form-group">
+                    <label class="form-label">Kelas <span class="text-danger">*</span></label>
+                    <select name="kelas_id" class="form-control form-select" required>
+                        @foreach($kelasList as $kelas)
+                            <option value="{{ $kelas->id }}" {{ old('kelas_id', $santri->kelas_id) == $kelas->id ? 'selected' : '' }}>{{ $kelas->nama_kelas }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div class="form-group">

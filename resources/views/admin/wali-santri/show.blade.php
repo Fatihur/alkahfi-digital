@@ -89,7 +89,6 @@
                                 <th>NIS</th>
                                 <th>Nama Santri</th>
                                 <th>Kelas</th>
-                                <th>Angkatan</th>
                                 <th>Hubungan</th>
                                 <th>Status</th>
                             </tr>
@@ -104,7 +103,6 @@
                                         </a>
                                     </td>
                                     <td>{{ $ws->santri->kelas->nama ?? '-' }}</td>
-                                    <td>{{ $ws->santri->angkatan->nama ?? '-' }}</td>
                                     <td><span class="badge badge-info">{{ ucfirst($ws->hubungan) }}</span></td>
                                     <td>
                                         @if($ws->santri->status == 'aktif')
@@ -116,7 +114,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="text-center text-muted">Belum ada santri yang terhubung</td>
+                                    <td colspan="5" class="text-center text-muted">Belum ada santri yang terhubung</td>
                                 </tr>
                             @endforelse
                         </tbody>

@@ -62,7 +62,6 @@
                                     <th>NIS</th>
                                     <th>Nama Santri</th>
                                     <th>Kelas</th>
-                                    <th>Angkatan</th>
                                     <th>Email yang akan dibuat</th>
                                 </tr>
                             </thead>
@@ -75,7 +74,6 @@
                                         <td>{{ $santri->nis }}</td>
                                         <td>{{ $santri->nama_lengkap }}</td>
                                         <td>{{ $santri->kelas->nama ?? '-' }}</td>
-                                        <td>{{ $santri->angkatan->nama ?? '-' }}</td>
                                         <td>
                                             <code>{{ Str::slug($santri->nama_lengkap, '.') }}@wali.pesantren.id</code>
                                         </td>

@@ -31,7 +31,6 @@
                             <select name="tipe_tagihan" id="tipe_tagihan" class="form-control form-select" required>
                                 <option value="individual">Per Santri</option>
                                 <option value="kelas">Per Kelas</option>
-                                <option value="angkatan">Per Angkatan</option>
                             </select>
                         </div>
                     </div>
@@ -51,15 +50,6 @@
                                 <option value="">Pilih Kelas</option>
                                 @foreach($kelasList as $k)
                                     <option value="{{ $k->id }}">{{ $k->nama_kelas }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group" id="angkatan_group" style="display:none;">
-                            <label class="form-label">Angkatan <span class="text-danger">*</span></label>
-                            <select name="angkatan_id" class="form-control form-select">
-                                <option value="">Pilih Angkatan</option>
-                                @foreach($angkatanList as $a)
-                                    <option value="{{ $a->id }}">{{ $a->tahun_angkatan }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -146,14 +136,11 @@
     document.getElementById('tipe_tagihan').addEventListener('change', function() {
         document.getElementById('santri_group').style.display = 'none';
         document.getElementById('kelas_group').style.display = 'none';
-        document.getElementById('angkatan_group').style.display = 'none';
         
         if (this.value === 'individual') {
             document.getElementById('santri_group').style.display = 'block';
         } else if (this.value === 'kelas') {
             document.getElementById('kelas_group').style.display = 'block';
-        } else if (this.value === 'angkatan') {
-            document.getElementById('angkatan_group').style.display = 'block';
         }
     });
 </script>

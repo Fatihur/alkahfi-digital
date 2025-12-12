@@ -15,7 +15,6 @@ class Slider extends Model
         'judul',
         'deskripsi',
         'gambar',
-        'link',
         'is_active',
         'urutan',
     ];

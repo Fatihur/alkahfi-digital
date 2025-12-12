@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - {{ config('app.name') }}</title>
+    <title>Login - <?php echo e(config('app.name')); ?></title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    <link href="<?php echo e(asset('css/style.css')); ?>" rel="stylesheet">
 </head>
 <body>
     <div class="login-page">
@@ -21,31 +21,31 @@
         <div class="login-right">
             <div class="login-form">
                 <div class="text-center mb-5">
-                    <img src="{{ asset('logo-alkahfi.png') }}" alt="Logo Al-Kahfi" class="login-logo mb-4">
+                    <img src="<?php echo e(asset('logo-alkahfi.png')); ?>" alt="Logo Al-Kahfi" class="login-logo mb-4">
                     <h1>Masuk</h1>
                     <p class="subtitle">Silakan masukkan email dan password Anda.</p>
                 </div>
 
-                @if(session('success'))
+                <?php if(session('success')): ?>
                     <div class="alert alert-success">
                         <i class="bi bi-check-circle"></i>
-                        <span>{{ session('success') }}</span>
+                        <span><?php echo e(session('success')); ?></span>
                     </div>
-                @endif
+                <?php endif; ?>
 
-                @if($errors->any())
+                <?php if($errors->any()): ?>
                     <div class="alert alert-danger">
                         <i class="bi bi-exclamation-circle"></i>
-                        <span>{{ $errors->first() }}</span>
+                        <span><?php echo e($errors->first()); ?></span>
                     </div>
-                @endif
+                <?php endif; ?>
 
-                <form action="{{ route('login') }}" method="POST">
-                    @csrf
+                <form action="<?php echo e(route('login')); ?>" method="POST">
+                    <?php echo csrf_field(); ?>
                     <div class="form-group">
                         <label class="form-label">Email</label>
                         <div class="position-relative">
-                            <input type="email" name="email" class="form-control" placeholder="Masukkan email Anda" value="{{ old('email') }}" style="padding-left: 48px;" required>
+                            <input type="email" name="email" class="form-control" placeholder="Masukkan email Anda" value="<?php echo e(old('email')); ?>" style="padding-left: 48px;" required>
                             <i class="bi bi-envelope position-absolute" style="left: 16px; top: 50%; transform: translateY(-50%); color: var(--secondary-color);"></i>
                         </div>
                     </div>
@@ -68,7 +68,7 @@
                         Masuk
                     </button>
                      <div class="text-end mb-4">
-                        <a href="{{ route('password.request') }}" class="text-link">Lupa password?</a>
+                        <a href="<?php echo e(route('password.request')); ?>" class="text-link">Lupa password?</a>
                     </div>
                 </form>
 
@@ -78,7 +78,7 @@
 
     <style>
         .login-page { display: flex; min-height: 100vh; }
-        .login-left { flex: 1; background: url('{{ asset('login.jpg') }}') center/cover no-repeat; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; color: white; position: relative; }
+        .login-left { flex: 1; background: url('<?php echo e(asset('login.jpg')); ?>') center/cover no-repeat; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; color: white; position: relative; }
         .login-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(79, 70, 229, 0.6) 0%, rgba(124, 58, 237, 0.6) 100%); }
         .login-left-content { position: relative; z-index: 1; text-align: center; max-width: 480px; }
         .login-left h2 { font-size: 2.5rem; margin-bottom: 20px; font-weight: 700; line-height: 1.2; text-shadow: 0 2px 10px rgba(0,0,0,0.2); }
@@ -118,3 +118,4 @@
     </script>
 </body>
 </html>
+<?php /**PATH D:\ORDER\MASTARI\E-SPP\alkahfi-digital\resources\views/auth/login.blade.php ENDPATH**/ ?>

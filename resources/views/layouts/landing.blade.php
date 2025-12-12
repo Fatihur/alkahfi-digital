@@ -9,10 +9,10 @@
     <meta content="" name="description">
 
     <!-- Favicon -->
-    @if($profil->logo ?? false)
+    @if($profil && $profil->logo)
         <link href="{{ Storage::url($profil->logo) }}" rel="icon">
     @else
-        <link href="{{ asset('landing/img/favicon.ico') }}" rel="icon">
+        <link href="{{ asset('logo-alkahfi.png') }}" rel="icon">
     @endif
 
     <!-- Google Web Fonts -->
@@ -95,10 +95,10 @@
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
         <a href="{{ route('landing.index') }}" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
-            @if($profil->logo ?? false)
+            @if($profil && $profil->logo)
                 <img src="{{ Storage::url($profil->logo) }}" alt="Logo" height="40" class="me-2">
             @else
-                <i class="fa fa-book me-3 text-primary"></i>
+                <img src="{{ asset('logo-alkahfi.png') }}" alt="Logo" height="40" class="me-2">
             @endif
             <h2 class="m-0 text-primary" style="font-size: 1.2rem;">{{ $profil->nama_sekolah ?? 'Sekolah' }}</h2>
         </a>

@@ -22,7 +22,6 @@ class Santri extends Model
         'tanggal_lahir',
         'alamat',
         'kelas_id',
-        'angkatan_id',
         'tanggal_masuk',
         'foto',
         'status',
@@ -36,11 +35,6 @@ class Santri extends Model
     public function kelas(): BelongsTo
     {
         return $this->belongsTo(Kelas::class);
-    }
-
-    public function angkatan(): BelongsTo
-    {
-        return $this->belongsTo(Angkatan::class);
     }
 
     public function waliSantri(): HasMany

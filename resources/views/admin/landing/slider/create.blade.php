@@ -14,19 +14,9 @@
         <div class="card-body">
             <form action="{{ route('admin.landing.slider.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <div class="row">
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label class="form-label">Judul</label>
-                            <input type="text" name="judul" class="form-control" value="{{ old('judul') }}">
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label class="form-label">Link</label>
-                            <input type="text" name="link" class="form-control" value="{{ old('link') }}" placeholder="https://...">
-                        </div>
-                    </div>
+                <div class="form-group">
+                    <label class="form-label">Judul</label>
+                    <input type="text" name="judul" class="form-control" value="{{ old('judul') }}">
                 </div>
 
                 <div class="form-group">

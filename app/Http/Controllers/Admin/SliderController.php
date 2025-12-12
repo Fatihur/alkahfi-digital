@@ -28,7 +28,6 @@ class SliderController extends Controller
             'judul' => ['nullable', 'string', 'max:255'],
             'deskripsi' => ['nullable', 'string'],
             'gambar' => ['required', 'image', 'max:2048'],
-            'link' => ['nullable', 'string', 'max:255'],
             'is_active' => ['boolean'],
             'urutan' => ['nullable', 'integer', 'min:0'],
         ]);
@@ -56,7 +55,6 @@ class SliderController extends Controller
             'judul' => ['nullable', 'string', 'max:255'],
             'deskripsi' => ['nullable', 'string'],
             'gambar' => ['nullable', 'image', 'max:2048'],
-            'link' => ['nullable', 'string', 'max:255'],
             'is_active' => ['boolean'],
             'urutan' => ['nullable', 'integer', 'min:0'],
         ]);

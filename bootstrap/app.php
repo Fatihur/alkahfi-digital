@@ -20,6 +20,17 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(except: [
             'api/midtrans/*',
         ]);
+
+        // Redirect authenticated users away from guest routes (login, register, etc.)
+        $middleware->redirectUsersTo(function ($request) {
+            $user = $request->user();
+            return match ($user?->role) {
+                'admin' => route('admin.dashboard'),
+                'bendahara' => route('bendahara.dashboard'),
+                'wali_santri' => route('wali.dashboard'),
+                default => route('landing.index'),
+            };
+        });
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

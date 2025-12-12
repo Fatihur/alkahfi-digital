@@ -3,40 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Dashboard') - {{ config('app.name') }}</title>
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
+    <title><?php echo $__env->yieldContent('title', 'Dashboard'); ?> - <?php echo e(config('app.name')); ?></title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" rel="stylesheet">
-    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
-    @stack('styles')
+    <link href="<?php echo e(asset('css/style.css')); ?>" rel="stylesheet">
+    <?php echo $__env->yieldPushContent('styles'); ?>
 </head>
-@php
+<?php
     $profilSekolah = \App\Models\ProfilSekolah::first();
-@endphp
+?>
 <body>
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <a href="#" class="sidebar-logo">
-                @if($profilSekolah && $profilSekolah->logo)
-                    <img src="{{ Storage::url($profilSekolah->logo) }}" alt="Logo" class="sidebar-logo-img">
-                @else
-                    <img src="{{ asset('logo-alkahfi.png') }}" alt="Logo" class="sidebar-logo-img">
-                @endif
-                <span class="sidebar-brand">{{ $profilSekolah->nama_sekolah ?? 'ALKAHFI DIGITAL' }}</span>
+                <?php if($profilSekolah && $profilSekolah->logo): ?>
+                    <img src="<?php echo e(Storage::url($profilSekolah->logo)); ?>" alt="Logo" class="sidebar-logo-img">
+                <?php else: ?>
+                    <img src="<?php echo e(asset('logo-alkahfi.png')); ?>" alt="Logo" class="sidebar-logo-img">
+                <?php endif; ?>
+                <span class="sidebar-brand"><?php echo e($profilSekolah->nama_sekolah ?? 'ALKAHFI DIGITAL'); ?></span>
             </a>
         </div>
 
         <div class="sidebar-menu">
-            @yield('sidebar-menu')
+            <?php echo $__env->yieldContent('sidebar-menu'); ?>
         </div>
 
         <div class="sidebar-footer">
             <div class="user-profile">
-                <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=eef2ff&color=4f46e5" alt="User" class="user-avatar">
+                <img src="https://ui-avatars.com/api/?name=<?php echo e(urlencode(auth()->user()->name)); ?>&background=eef2ff&color=4f46e5" alt="User" class="user-avatar">
                 <div class="user-info">
-                    <div class="user-name">{{ auth()->user()->name }}</div>
-                    <div class="user-role">{{ ucfirst(str_replace('_', ' ', auth()->user()->role)) }}</div>
+                    <div class="user-name"><?php echo e(auth()->user()->name); ?></div>
+                    <div class="user-role"><?php echo e(ucfirst(str_replace('_', ' ', auth()->user()->role))); ?></div>
                 </div>
             </div>
         </div>
@@ -57,64 +57,64 @@
                 <button class="btn-icon" id="themeToggle">
                     <i class="bi bi-moon"></i>
                 </button>
-                @if(auth()->user()->isWaliSantri())
+                <?php if(auth()->user()->isWaliSantri()): ?>
                 <div class="notification-dropdown">
                     <button class="btn-icon" id="notificationBtn" onclick="toggleNotificationDropdown()">
                         <i class="bi bi-bell"></i>
-                        @php
+                        <?php
                             $unreadNotifCount = \App\Models\Notifikasi::where('user_id', auth()->id())->where('is_read', false)->count();
-                        @endphp
-                        @if($unreadNotifCount > 0)
-                            <span class="notification-badge">{{ $unreadNotifCount > 9 ? '9+' : $unreadNotifCount }}</span>
-                        @endif
+                        ?>
+                        <?php if($unreadNotifCount > 0): ?>
+                            <span class="notification-badge"><?php echo e($unreadNotifCount > 9 ? '9+' : $unreadNotifCount); ?></span>
+                        <?php endif; ?>
                     </button>
                     <div class="notification-menu" id="notificationMenu">
                         <div class="notification-header">
                             <span class="fw-bold">Notifikasi</span>
-                            @if($unreadNotifCount > 0)
-                                <span class="badge badge-primary">{{ $unreadNotifCount }} baru</span>
-                            @endif
+                            <?php if($unreadNotifCount > 0): ?>
+                                <span class="badge badge-primary"><?php echo e($unreadNotifCount); ?> baru</span>
+                            <?php endif; ?>
                         </div>
                         <div class="notification-body" id="notificationBody">
-                            @php
+                            <?php
                                 $latestNotif = \App\Models\Notifikasi::where('user_id', auth()->id())->latest()->take(5)->get();
-                            @endphp
-                            @forelse($latestNotif as $notif)
-                                <a href="{{ route('wali.notifikasi.show', $notif) }}" class="notification-item {{ !$notif->is_read ? 'unread' : '' }}">
+                            ?>
+                            <?php $__empty_1 = true; $__currentLoopData = $latestNotif; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $notif): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                <a href="<?php echo e(route('wali.notifikasi.show', $notif)); ?>" class="notification-item <?php echo e(!$notif->is_read ? 'unread' : ''); ?>">
                                     <div class="notification-icon">
-                                        @if($notif->tipe == 'tagihan')
+                                        <?php if($notif->tipe == 'tagihan'): ?>
                                             <i class="bi bi-receipt text-warning"></i>
-                                        @elseif($notif->tipe == 'pembayaran')
+                                        <?php elseif($notif->tipe == 'pembayaran'): ?>
                                             <i class="bi bi-check-circle text-success"></i>
-                                        @else
+                                        <?php else: ?>
                                             <i class="bi bi-info-circle text-info"></i>
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
                                     <div class="notification-content">
-                                        <div class="notification-title">{{ $notif->judul }}</div>
-                                        <div class="notification-text">{{ Str::limit($notif->pesan, 50) }}</div>
-                                        <div class="notification-time">{{ $notif->created_at->diffForHumans() }}</div>
+                                        <div class="notification-title"><?php echo e($notif->judul); ?></div>
+                                        <div class="notification-text"><?php echo e(Str::limit($notif->pesan, 50)); ?></div>
+                                        <div class="notification-time"><?php echo e($notif->created_at->diffForHumans()); ?></div>
                                     </div>
                                 </a>
-                            @empty
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                 <div class="text-center py-4 text-muted">
                                     <i class="bi bi-bell-slash"></i>
                                     <p class="mb-0 small">Tidak ada notifikasi</p>
                                 </div>
-                            @endforelse
+                            <?php endif; ?>
                         </div>
                         <div class="notification-footer">
-                            <a href="{{ route('wali.notifikasi.index') }}">Lihat Semua Notifikasi</a>
+                            <a href="<?php echo e(route('wali.notifikasi.index')); ?>">Lihat Semua Notifikasi</a>
                         </div>
                     </div>
                 </div>
-                @else
+                <?php else: ?>
                 <button class="btn-icon" id="notificationBtn">
                     <i class="bi bi-bell"></i>
                 </button>
-                @endif
-                <form action="{{ route('logout') }}" method="POST" style="display: inline;">
-                    @csrf
+                <?php endif; ?>
+                <form action="<?php echo e(route('logout')); ?>" method="POST" style="display: inline;">
+                    <?php echo csrf_field(); ?>
                     <button type="submit" class="btn-icon" title="Logout">
                         <i class="bi bi-box-arrow-right"></i>
                     </button>
@@ -123,21 +123,21 @@
         </nav>
 
         <div class="page-content">
-            @if(session('success'))
+            <?php if(session('success')): ?>
                 <div class="alert alert-success">
                     <i class="bi bi-check-circle"></i>
-                    <span>{{ session('success') }}</span>
+                    <span><?php echo e(session('success')); ?></span>
                 </div>
-            @endif
+            <?php endif; ?>
 
-            @if(session('error'))
+            <?php if(session('error')): ?>
                 <div class="alert alert-danger">
                     <i class="bi bi-exclamation-circle"></i>
-                    <span>{{ session('error') }}</span>
+                    <span><?php echo e(session('error')); ?></span>
                 </div>
-            @endif
+            <?php endif; ?>
 
-            @yield('content')
+            <?php echo $__env->yieldContent('content'); ?>
         </div>
     </main>
 
@@ -601,7 +601,7 @@
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-    <script src="{{ asset('js/script.js') }}"></script>
+    <script src="<?php echo e(asset('js/script.js')); ?>"></script>
     <script>
         function toggleNotificationDropdown() {
             const menu = document.getElementById('notificationMenu');
@@ -639,6 +639,7 @@
             lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Semua"]]
         });
     </script>
-    @stack('scripts')
+    <?php echo $__env->yieldPushContent('scripts'); ?>
 </body>
 </html>
+<?php /**PATH D:\ORDER\MASTARI\E-SPP\alkahfi-digital\resources\views/layouts/app.blade.php ENDPATH**/ ?>

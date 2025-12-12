@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Angkatan;
 use App\Models\KategoriTagihan;
 use App\Models\Kelas;
 use App\Models\LogAktivitas;
@@ -46,16 +45,15 @@ class TagihanController extends Controller
     {
         $santriList = Santri::where('status', 'aktif')->get();
         $kelasList = Kelas::where('is_active', true)->get();
-        $angkatanList = Angkatan::where('is_active', true)->get();
         $kategoriList = KategoriTagihan::where('is_active', true)->get();
 
-        return view('admin.tagihan.create', compact('santriList', 'kelasList', 'angkatanList', 'kategoriList'));
+        return view('admin.tagihan.create', compact('santriList', 'kelasList', 'kategoriList'));
     }
 
     public function store(Request $request)
     {
         $rules = [
-            'tipe_tagihan' => ['required', 'in:individual,kelas,angkatan'],
+            'tipe_tagihan' => ['required', 'in:individual,kelas'],
             'kategori_tagihan_id' => ['nullable', 'exists:kategori_tagihan,id'],
             'nama_tagihan' => ['required', 'string', 'max:150'],
             'periode' => ['nullable', 'string', 'max:20'],
@@ -70,8 +68,6 @@ class TagihanController extends Controller
             $rules['santri_id'] = ['required', 'exists:santri,id'];
         } elseif ($request->tipe_tagihan === 'kelas') {
             $rules['kelas_id'] = ['required', 'exists:kelas,id'];
-        } elseif ($request->tipe_tagihan === 'angkatan') {
-            $rules['angkatan_id'] = ['required', 'exists:angkatan,id'];
         }
 
         $validated = $request->validate($rules);
@@ -92,20 +88,12 @@ class TagihanController extends Controller
                         ->toArray();
                 }
                 break;
-            case 'angkatan':
-                if ($request->filled('angkatan_id')) {
-                    $santriIds = Santri::where('angkatan_id', $request->angkatan_id)
-                        ->where('status', 'aktif')
-                        ->pluck('id')
-                        ->toArray();
-                }
-                break;
         }
 
         $santriIds = array_filter($santriIds);
 
         if (empty($santriIds)) {
-            return back()->withInput()->with('error', 'Tidak ada santri yang ditemukan. Pastikan memilih santri/kelas/angkatan yang valid.');
+            return back()->withInput()->with('error', 'Tidak ada santri yang ditemukan. Pastikan memilih santri/kelas yang valid.');
         }
 
         $count = 0;

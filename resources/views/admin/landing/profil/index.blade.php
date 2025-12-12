@@ -60,7 +60,7 @@
                     <div class="col-4">
                         <div class="form-group">
                             <label class="form-label">Website</label>
-                            <input type="url" name="website" class="form-control" value="{{ old('website', $profil->website) }}" placeholder="https://...">
+                            <input type="text" name="website" class="form-control" value="{{ old('website', $profil->website) }}" placeholder="https://...">
                         </div>
                     </div>
                 </div>
@@ -144,13 +144,13 @@
                     <div class="col-6">
                         <div class="form-group">
                             <label class="form-label"><i class="bi bi-facebook text-primary"></i> Facebook</label>
-                            <input type="url" name="facebook" class="form-control" value="{{ old('facebook', $profil->sosial_media['facebook'] ?? '') }}" placeholder="https://facebook.com/...">
+                            <input type="text" name="facebook" class="form-control" value="{{ old('facebook', $profil->sosial_media['facebook'] ?? '') }}" placeholder="https://facebook.com/...">
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="form-group">
                             <label class="form-label"><i class="bi bi-instagram text-danger"></i> Instagram</label>
-                            <input type="url" name="instagram" class="form-control" value="{{ old('instagram', $profil->sosial_media['instagram'] ?? '') }}" placeholder="https://instagram.com/...">
+                            <input type="text" name="instagram" class="form-control" value="{{ old('instagram', $profil->sosial_media['instagram'] ?? '') }}" placeholder="https://instagram.com/...">
                         </div>
                     </div>
                 </div>
@@ -159,13 +159,13 @@
                     <div class="col-6">
                         <div class="form-group">
                             <label class="form-label"><i class="bi bi-youtube text-danger"></i> YouTube</label>
-                            <input type="url" name="youtube" class="form-control" value="{{ old('youtube', $profil->sosial_media['youtube'] ?? '') }}" placeholder="https://youtube.com/...">
+                            <input type="text" name="youtube" class="form-control" value="{{ old('youtube', $profil->sosial_media['youtube'] ?? '') }}" placeholder="https://youtube.com/...">
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="form-group">
                             <label class="form-label"><i class="bi bi-twitter-x"></i> Twitter/X</label>
-                            <input type="url" name="twitter" class="form-control" value="{{ old('twitter', $profil->sosial_media['twitter'] ?? '') }}" placeholder="https://x.com/...">
+                            <input type="text" name="twitter" class="form-control" value="{{ old('twitter', $profil->sosial_media['twitter'] ?? '') }}" placeholder="https://x.com/...">
                         </div>
                     </div>
                 </div>

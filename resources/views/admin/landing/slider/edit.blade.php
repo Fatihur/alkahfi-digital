@@ -16,19 +16,9 @@
                 @csrf
                 @method('PUT')
 
-                <div class="row">
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label class="form-label">Judul</label>
-                            <input type="text" name="judul" class="form-control" value="{{ old('judul', $slider->judul) }}">
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label class="form-label">Link</label>
-                            <input type="text" name="link" class="form-control" value="{{ old('link', $slider->link) }}" placeholder="https://...">
-                        </div>
-                    </div>
+                <div class="form-group">
+                    <label class="form-label">Judul</label>
+                    <input type="text" name="judul" class="form-control" value="{{ old('judul', $slider->judul) }}">
                 </div>
 
                 <div class="form-group">
