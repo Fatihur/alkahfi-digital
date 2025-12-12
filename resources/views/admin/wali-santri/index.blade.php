@@ -9,9 +9,7 @@
             <p class="page-subtitle">Kelola data wali santri dan akun login mereka.</p>
         </div>
         <div class="d-flex gap-2">
-            <a href="{{ route('admin.wali-santri.generate') }}" class="btn btn-success">
-                <i class="bi bi-magic"></i> Generate Akun Otomatis
-            </a>
+            
             <a href="{{ route('admin.wali-santri.create') }}" class="btn btn-primary">
                 <i class="bi bi-plus"></i> Tambah Wali Santri
             </a>
@@ -21,12 +19,13 @@
     @if(session('generated_accounts'))
         <div class="alert alert-success">
             <h5><i class="bi bi-check-circle"></i> Akun Berhasil Dibuat</h5>
-            <p>Simpan informasi login berikut:</p>
+            <p>Simpan informasi login berikut (Password menggunakan NIS santri):</p>
             <div class="table-responsive">
                 <table class="table table-sm table-bordered bg-white">
                     <thead>
                         <tr>
                             <th>Santri</th>
+                            <th>NIS</th>
                             <th>Email</th>
                             <th>Password</th>
                         </tr>
@@ -35,6 +34,7 @@
                         @foreach(session('generated_accounts') as $account)
                             <tr>
                                 <td>{{ $account['santri'] }}</td>
+                                <td><code>{{ $account['nis'] ?? $account['password'] }}</code></td>
                                 <td><code>{{ $account['email'] }}</code></td>
                                 <td><code>{{ $account['password'] }}</code></td>
                             </tr>

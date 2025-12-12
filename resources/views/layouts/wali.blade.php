@@ -30,12 +30,7 @@
             <span>Pengumuman</span>
         </a>
     </div>
-    <div class="nav-item">
-        <a href="{{ route('wali.jadwal.index') }}" class="nav-link {{ request()->routeIs('wali.jadwal.*') ? 'active' : '' }}">
-            <i class="bi bi-calendar-event"></i>
-            <span>Jadwal</span>
-        </a>
-    </div>
+
     <div class="nav-item">
         <a href="{{ route('wali.kegiatan.index') }}" class="nav-link {{ request()->routeIs('wali.kegiatan.*') ? 'active' : '' }}">
             <i class="bi bi-calendar-check"></i>

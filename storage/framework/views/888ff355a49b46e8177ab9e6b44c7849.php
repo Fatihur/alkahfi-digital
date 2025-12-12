@@ -1,8 +1,8 @@
-@extends('layouts.admin')
 
-@section('title', 'Generate Akun Wali Santri')
 
-@section('content')
+<?php $__env->startSection('title', 'Generate Akun Wali Santri'); ?>
+
+<?php $__env->startSection('content'); ?>
     <div class="page-header">
         <div>
             <h1 class="page-title">Generate Akun Otomatis</h1>
@@ -10,35 +10,49 @@
         </div>
     </div>
 
-    @if($santriTanpaWali->count() == 0)
+    <?php if($santriTanpaWali->count() == 0): ?>
         <div class="alert alert-info">
             <i class="bi bi-info-circle"></i> Semua santri aktif sudah memiliki akun wali. Tidak ada santri yang perlu dibuatkan akun.
         </div>
-        <a href="{{ route('admin.wali-santri.index') }}" class="btn btn-secondary">
+        <a href="<?php echo e(route('admin.wali-santri.index')); ?>" class="btn btn-secondary">
             <i class="bi bi-arrow-left"></i> Kembali
         </a>
-    @else
+    <?php else: ?>
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <span>Pilih santri yang akan dibuatkan akun wali</span>
-                <span class="badge badge-info">{{ $santriTanpaWali->count() }} santri tanpa wali</span>
+                <span class="badge badge-info"><?php echo e($santriTanpaWali->count()); ?> santri tanpa wali</span>
             </div>
             <div class="card-body">
-                <form action="{{ route('admin.wali-santri.generate.store') }}" method="POST" id="generateForm">
-                    @csrf
+                <form action="<?php echo e(route('admin.wali-santri.generate.store')); ?>" method="POST" id="generateForm">
+                    <?php echo csrf_field(); ?>
 
                     <div class="row">
                         <div class="col-6">
                             <div class="form-group">
                                 <label class="form-label">Hubungan Default <span class="text-danger">*</span></label>
-                                <select class="form-control form-select @error('hubungan_default') is-invalid @enderror" name="hubungan_default" required>
+                                <select class="form-control form-select <?php $__errorArgs = ['hubungan_default'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" name="hubungan_default" required>
                                     <option value="ayah">Ayah</option>
                                     <option value="ibu">Ibu</option>
                                     <option value="wali" selected>Wali</option>
                                 </select>
-                                @error('hubungan_default')
-                                    <div class="text-danger" style="font-size: 0.875rem; margin-top: 4px;">{{ $message }}</div>
-                                @enderror
+                                <?php $__errorArgs = ['hubungan_default'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                    <div class="text-danger" style="font-size: 0.875rem; margin-top: 4px;"><?php echo e($message); ?></div>
+                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 <small class="text-muted">Hubungan default yang akan digunakan untuk semua akun yang dibuat</small>
                             </div>
                         </div>
@@ -66,33 +80,33 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($santriTanpaWali as $santri)
+                                <?php $__currentLoopData = $santriTanpaWali; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $santri): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr>
                                         <td>
-                                            <input type="checkbox" class="form-check-input santri-checkbox" name="santri_ids[]" value="{{ $santri->id }}">
+                                            <input type="checkbox" class="form-check-input santri-checkbox" name="santri_ids[]" value="<?php echo e($santri->id); ?>">
                                         </td>
-                                        <td>{{ $santri->nis }}</td>
-                                        <td>{{ $santri->nama_lengkap }}</td>
-                                        <td>{{ $santri->kelas->nama ?? '-' }}</td>
+                                        <td><?php echo e($santri->nis); ?></td>
+                                        <td><?php echo e($santri->nama_lengkap); ?></td>
+                                        <td><?php echo e($santri->kelas->nama ?? '-'); ?></td>
                                         <td>
-                                            <code>{{ Str::slug($santri->nama_lengkap, '.') }}@wali.pesantren.id</code>
+                                            <code><?php echo e(Str::slug($santri->nama_lengkap, '.')); ?>@wali.pesantren.id</code>
                                         </td>
                                     </tr>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
                         </table>
                     </div>
 
-                    <div class="alert alert-info">
-                        <i class="bi bi-info-circle"></i>
-                        <strong>Info:</strong> Password akun wali akan menggunakan <strong>NIS santri</strong>.
-                        Pastikan untuk menginformasikan kepada wali santri.
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        <strong>Perhatian:</strong> Password akan di-generate secara otomatis dan ditampilkan setelah proses selesai.
+                        Pastikan untuk menyimpan informasi login tersebut.
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center">
                         <span id="selectedCount" class="text-muted">0 santri dipilih</span>
                         <div class="d-flex gap-2">
-                            <a href="{{ route('admin.wali-santri.index') }}" class="btn btn-secondary">Batal</a>
+                            <a href="<?php echo e(route('admin.wali-santri.index')); ?>" class="btn btn-secondary">Batal</a>
                             <button type="submit" class="btn btn-success" id="submitBtn" disabled>
                                 <i class="bi bi-magic"></i> Generate Akun (<span id="btnCount">0</span>)
                             </button>
@@ -101,9 +115,9 @@
                 </form>
             </div>
         </div>
-    @endif
+    <?php endif; ?>
 
-    @push('scripts')
+    <?php $__env->startPush('scripts'); ?>
     <script>
         const checkboxes = document.querySelectorAll('.santri-checkbox');
         const selectAll = document.getElementById('selectAll');
@@ -154,5 +168,7 @@
             return confirm('Generate ' + checked + ' akun wali santri?');
         });
     </script>
-    @endpush
-@endsection
+    <?php $__env->stopPush(); ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\ORDER\MASTARI\E-SPP\alkahfi-digital\resources\views/admin/wali-santri/generate.blade.php ENDPATH**/ ?>

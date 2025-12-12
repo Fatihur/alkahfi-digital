@@ -6,7 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\BeritaController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\GaleriController;
-use App\Http\Controllers\Admin\JadwalController;
+use App\Http\Controllers\Admin\JurusanController;
 use App\Http\Controllers\Admin\KegiatanController;
 use App\Http\Controllers\Admin\KelasController;
 use App\Http\Controllers\Admin\LaporanController;
@@ -53,6 +53,11 @@ Route::middleware('guest')->group(function () {
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
 
 Route::middleware(['auth', 'check.active'])->group(function () {
+    // Profile Routes
+    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password');
+
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
         
@@ -72,6 +77,7 @@ Route::middleware(['auth', 'check.active'])->group(function () {
         
         Route::resource('santri', SantriController::class);
         Route::resource('kelas', KelasController::class);
+        Route::resource('jurusan', JurusanController::class);
         Route::resource('tagihan', AdminTagihanController::class);
         
         Route::get('/pembayaran', [AdminPembayaranController::class, 'index'])->name('pembayaran.index');
@@ -82,7 +88,7 @@ Route::middleware(['auth', 'check.active'])->group(function () {
         Route::get('/pembayaran/tagihan/{santri}', [AdminPembayaranController::class, 'getTagihanBySantri'])->name('pembayaran.tagihan');
         
         Route::resource('pengumuman', PengumumanController::class);
-        Route::resource('jadwal', JadwalController::class);
+
         Route::resource('kegiatan', KegiatanController::class);
         
         Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
@@ -143,7 +149,7 @@ Route::middleware(['auth', 'check.active'])->group(function () {
         
         Route::get('/pengumuman', [InformasiController::class, 'pengumuman'])->name('pengumuman.index');
         Route::get('/pengumuman/{pengumuman}', [InformasiController::class, 'showPengumuman'])->name('pengumuman.show');
-        Route::get('/jadwal', [InformasiController::class, 'jadwal'])->name('jadwal.index');
+
         Route::get('/kegiatan', [InformasiController::class, 'kegiatan'])->name('kegiatan.index');
         Route::get('/kegiatan/{kegiatan}', [InformasiController::class, 'showKegiatan'])->name('kegiatan.show');
         

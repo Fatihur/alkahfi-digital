@@ -34,6 +34,12 @@
             <span>Kelas</span>
         </a>
     </div>
+    <div class="nav-item">
+        <a href="{{ route('admin.jurusan.index') }}" class="nav-link {{ request()->routeIs('admin.jurusan.*') ? 'active' : '' }}">
+            <i class="bi bi-mortarboard"></i>
+            <span>Jurusan</span>
+        </a>
+    </div>
 
     <div class="menu-label">Keuangan</div>
     <div class="nav-item">
@@ -50,12 +56,7 @@
             <span>Pengumuman</span>
         </a>
     </div>
-    <div class="nav-item">
-        <a href="{{ route('admin.jadwal.index') }}" class="nav-link {{ request()->routeIs('admin.jadwal.*') ? 'active' : '' }}">
-            <i class="bi bi-calendar-event"></i>
-            <span>Jadwal</span>
-        </a>
-    </div>
+
     <div class="nav-item">
         <a href="{{ route('admin.kegiatan.index') }}" class="nav-link {{ request()->routeIs('admin.kegiatan.*') ? 'active' : '' }}">
             <i class="bi bi-calendar-check"></i>

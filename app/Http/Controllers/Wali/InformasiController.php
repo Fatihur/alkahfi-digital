@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Wali;
 
 use App\Http\Controllers\Controller;
-use App\Models\Jadwal;
+
 use App\Models\Kegiatan;
 use App\Models\Pengumuman;
 
@@ -26,16 +26,6 @@ class InformasiController extends Controller
         }
 
         return view('wali.informasi.show-pengumuman', compact('pengumuman'));
-    }
-
-    public function jadwal()
-    {
-        $jadwal = Jadwal::published()
-            ->upcoming()
-            ->orderBy('tanggal_mulai')
-            ->paginate(10);
-
-        return view('wali.informasi.jadwal', compact('jadwal'));
     }
 
     public function kegiatan()

@@ -23,7 +23,7 @@
                 <?php else: ?>
                     <img src="<?php echo e(asset('logo-alkahfi.png')); ?>" alt="Logo" class="sidebar-logo-img">
                 <?php endif; ?>
-                <span class="sidebar-brand"><?php echo e($profilSekolah->nama_sekolah ?? 'ALKAHFI DIGITAL'); ?></span>
+                <span class="sidebar-brand">AL-KAHFI</span>
             </a>
         </div>
 
@@ -31,15 +31,7 @@
             <?php echo $__env->yieldContent('sidebar-menu'); ?>
         </div>
 
-        <div class="sidebar-footer">
-            <div class="user-profile">
-                <img src="https://ui-avatars.com/api/?name=<?php echo e(urlencode(auth()->user()->name)); ?>&background=eef2ff&color=4f46e5" alt="User" class="user-avatar">
-                <div class="user-info">
-                    <div class="user-name"><?php echo e(auth()->user()->name); ?></div>
-                    <div class="user-role"><?php echo e(ucfirst(str_replace('_', ' ', auth()->user()->role))); ?></div>
-                </div>
-            </div>
-        </div>
+
     </aside>
 
     <main class="main-content">
@@ -47,11 +39,6 @@
             <button class="btn-icon" id="sidebarToggle">
                 <i class="bi bi-list"></i>
             </button>
-
-            <div class="search-box">
-                <i class="bi bi-search" style="color: var(--text-muted)"></i>
-                <input type="text" placeholder="Cari...">
-            </div>
 
             <div class="navbar-actions">
                 <button class="btn-icon" id="themeToggle">
@@ -113,12 +100,37 @@
                     <i class="bi bi-bell"></i>
                 </button>
                 <?php endif; ?>
-                <form action="<?php echo e(route('logout')); ?>" method="POST" style="display: inline;">
-                    <?php echo csrf_field(); ?>
-                    <button type="submit" class="btn-icon" title="Logout">
-                        <i class="bi bi-box-arrow-right"></i>
+                
+                <!-- User Account Dropdown -->
+                <div class="user-dropdown">
+                    <button class="user-dropdown-toggle" onclick="toggleUserDropdown()">
+                        <img src="https://ui-avatars.com/api/?name=<?php echo e(urlencode(auth()->user()->name)); ?>&background=eef2ff&color=4f46e5&size=32" alt="User" class="user-dropdown-avatar">
+                        <span class="user-dropdown-name"><?php echo e(auth()->user()->name); ?></span>
+                        <i class="bi bi-chevron-down"></i>
                     </button>
-                </form>
+                    <div class="user-dropdown-menu" id="userDropdownMenu">
+                        <div class="user-dropdown-header">
+                            <img src="https://ui-avatars.com/api/?name=<?php echo e(urlencode(auth()->user()->name)); ?>&background=eef2ff&color=4f46e5&size=48" alt="User" class="user-dropdown-header-avatar">
+                            <div class="user-dropdown-header-info">
+                                <div class="user-dropdown-header-name"><?php echo e(auth()->user()->name); ?></div>
+                                <div class="user-dropdown-header-role"><?php echo e(ucfirst(str_replace('_', ' ', auth()->user()->role))); ?></div>
+                            </div>
+                        </div>
+                        <div class="user-dropdown-divider"></div>
+                        <a href="<?php echo e(route('profile.edit')); ?>" class="user-dropdown-item">
+                            <i class="bi bi-person"></i>
+                            <span>Profil Saya</span>
+                        </a>
+                        <div class="user-dropdown-divider"></div>
+                        <form action="<?php echo e(route('logout')); ?>" method="POST">
+                            <?php echo csrf_field(); ?>
+                            <button type="submit" class="user-dropdown-item user-dropdown-logout">
+                                <i class="bi bi-box-arrow-right"></i>
+                                <span>Logout</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </nav>
 
@@ -245,6 +257,140 @@
             text-decoration: none;
             font-size: 0.875rem;
             font-weight: 500;
+        }
+        
+        /* User Dropdown */
+        .user-dropdown {
+            position: relative;
+        }
+        .user-dropdown-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            background: var(--bg-body);
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .user-dropdown-toggle:hover {
+            background: var(--primary-subtle);
+            border-color: var(--primary-color);
+        }
+        .user-dropdown-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+        }
+        .user-dropdown-name {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-main);
+            max-width: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .user-dropdown-toggle i {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            transition: transform 0.2s ease;
+        }
+        .user-dropdown.show .user-dropdown-toggle i {
+            transform: rotate(180deg);
+        }
+        .user-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 260px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            display: none;
+            z-index: 1000;
+            overflow: hidden;
+        }
+        .user-dropdown.show .user-dropdown-menu {
+            display: block;
+        }
+        .user-dropdown-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: var(--bg-body);
+        }
+        .user-dropdown-header-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+        }
+        .user-dropdown-header-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .user-dropdown-header-name {
+            font-weight: 600;
+            font-size: 0.9375rem;
+            color: var(--text-main);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .user-dropdown-header-role {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        .user-dropdown-divider {
+            height: 1px;
+            background: var(--border-color);
+        }
+        .user-dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: background 0.2s ease;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+        }
+        .user-dropdown-item:hover {
+            background: var(--bg-body);
+        }
+        .user-dropdown-item i {
+            font-size: 1.125rem;
+            color: var(--text-muted);
+        }
+        .user-dropdown-logout {
+            color: var(--danger-color);
+        }
+        .user-dropdown-logout i {
+            color: var(--danger-color);
+        }
+        .user-dropdown-logout:hover {
+            background: rgba(239, 68, 68, 0.1);
+        }
+        
+        @media(max-width: 768px) {
+            .user-dropdown-name {
+                display: none;
+            }
+            .user-dropdown-toggle {
+                padding: 6px;
+                border-radius: 50%;
+            }
+            .user-dropdown-toggle i.bi-chevron-down {
+                display: none;
+            }
         }
         
         @media(max-width: 768px) { .mobile-toggle { display: flex !important; } }
@@ -606,14 +752,28 @@
         function toggleNotificationDropdown() {
             const menu = document.getElementById('notificationMenu');
             menu.classList.toggle('show');
+            // Close user dropdown if open
+            document.querySelector('.user-dropdown')?.classList.remove('show');
         }
         
-        // Close dropdown when clicking outside
+        function toggleUserDropdown() {
+            const dropdown = document.querySelector('.user-dropdown');
+            dropdown.classList.toggle('show');
+            // Close notification dropdown if open
+            document.getElementById('notificationMenu')?.classList.remove('show');
+        }
+        
+        // Close dropdowns when clicking outside
         document.addEventListener('click', function(e) {
-            const dropdown = document.querySelector('.notification-dropdown');
-            const menu = document.getElementById('notificationMenu');
-            if (dropdown && menu && !dropdown.contains(e.target)) {
-                menu.classList.remove('show');
+            const notifDropdown = document.querySelector('.notification-dropdown');
+            const notifMenu = document.getElementById('notificationMenu');
+            if (notifDropdown && notifMenu && !notifDropdown.contains(e.target)) {
+                notifMenu.classList.remove('show');
+            }
+            
+            const userDropdown = document.querySelector('.user-dropdown');
+            if (userDropdown && !userDropdown.contains(e.target)) {
+                userDropdown.classList.remove('show');
             }
         });
 

@@ -69,7 +69,9 @@ class WaliSantriController extends Controller
         $generatedPassword = null;
         
         if ($request->boolean('generate_password') || empty($validated['password'])) {
-            $generatedPassword = Str::random(8);
+            // Gunakan NIS santri pertama sebagai password
+            $firstSantri = Santri::find($validated['santri_ids'][0]);
+            $generatedPassword = $firstSantri ? $firstSantri->nis : Str::random(8);
             $validated['password'] = Hash::make($generatedPassword);
         } else {
             $validated['password'] = Hash::make($validated['password']);
@@ -228,8 +230,8 @@ class WaliSantriController extends Controller
                     $counter++;
                 }
 
-                // Generate password
-                $password = Str::random(8);
+                // Password menggunakan NIS santri
+                $password = $santri->nis;
 
                 // Buat user
                 $user = User::create([
@@ -249,6 +251,7 @@ class WaliSantriController extends Controller
 
                 $results[] = [
                     'santri' => $santri->nama_lengkap,
+                    'nis' => $santri->nis,
                     'email' => $email,
                     'password' => $password,
                 ];
@@ -259,7 +262,7 @@ class WaliSantriController extends Controller
             DB::commit();
 
             return redirect()->route('admin.wali-santri.index')
-                ->with('success', 'Berhasil generate ' . count($results) . ' akun wali santri.')
+                ->with('success', 'Berhasil generate ' . count($results) . ' akun wali santri. Password menggunakan NIS santri.')
                 ->with('generated_accounts', $results);
 
         } catch (\Exception $e) {
@@ -283,11 +286,13 @@ class WaliSantriController extends Controller
     }
 
     /**
-     * Reset password wali santri
+     * Reset password wali santri menggunakan NIS santri pertama
      */
     public function resetPassword(User $wali_santri)
     {
-        $newPassword = Str::random(8);
+        // Ambil NIS santri pertama yang terhubung
+        $firstSantri = $wali_santri->waliSantri()->with('santri')->first()?->santri;
+        $newPassword = $firstSantri ? $firstSantri->nis : Str::random(8);
         
         $wali_santri->update([
             'password' => Hash::make($newPassword),
@@ -295,8 +300,12 @@ class WaliSantriController extends Controller
 
         LogAktivitas::log('Reset Password Wali', 'wali_santri', "Reset password wali santri: {$wali_santri->name}");
 
+        $message = $firstSantri 
+            ? "Password berhasil direset menggunakan NIS santri ({$firstSantri->nama_lengkap}). Password baru: {$newPassword}"
+            : "Password berhasil direset. Password baru: {$newPassword}";
+
         return back()
-            ->with('success', "Password berhasil direset. Password baru: {$newPassword}")
+            ->with('success', $message)
             ->with('new_password', $newPassword);
     }
 }

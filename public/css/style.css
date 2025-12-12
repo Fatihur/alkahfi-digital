@@ -125,6 +125,12 @@ body {
     flex: 1;
     padding: 20px 12px;
     overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.sidebar-menu::-webkit-scrollbar {
+    display: none;
 }
 
 .menu-label {
@@ -261,6 +267,7 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
+    margin-left: auto;
 }
 
 .btn-icon {
