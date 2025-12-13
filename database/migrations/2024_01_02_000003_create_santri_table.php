@@ -17,7 +17,6 @@ return new class extends Migration
             $table->date('tanggal_lahir')->nullable();
             $table->text('alamat')->nullable();
             $table->foreignId('kelas_id')->constrained('kelas')->onDelete('restrict');
-            $table->foreignId('angkatan_id')->constrained('angkatan')->onDelete('restrict');
             $table->date('tanggal_masuk')->nullable();
             $table->string('foto')->nullable();
             $table->enum('status', ['aktif', 'nonaktif', 'lulus', 'pindah'])->default('aktif');
