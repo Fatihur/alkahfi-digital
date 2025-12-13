@@ -56,24 +56,9 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label class="form-label">Nama Tagihan <span class="text-danger">*</span></label>
-                            <input type="text" name="nama_tagihan" class="form-control" placeholder="Contoh: SPP Januari 2025" required>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label class="form-label">Kategori</label>
-                            <select name="kategori_tagihan_id" class="form-control form-select">
-                                <option value="">Pilih Kategori</option>
-                                @foreach($kategoriList as $k)
-                                    <option value="{{ $k->id }}">{{ $k->nama_kategori }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
+                <div class="form-group">
+                    <label class="form-label">Nama Tagihan <span class="text-danger">*</span></label>
+                    <input type="text" name="nama_tagihan" class="form-control" placeholder="Contoh: SPP Januari 2025" required>
                 </div>
 
                 <div class="row">

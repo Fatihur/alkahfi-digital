@@ -15,7 +15,6 @@ class Tagihan extends Model
 
     protected $fillable = [
         'santri_id',
-        'kategori_tagihan_id',
         'nama_tagihan',
         'periode',
         'bulan',
@@ -41,11 +40,6 @@ class Tagihan extends Model
     public function santri(): BelongsTo
     {
         return $this->belongsTo(Santri::class);
-    }
-
-    public function kategoriTagihan(): BelongsTo
-    {
-        return $this->belongsTo(KategoriTagihan::class);
     }
 
     public function createdBy(): BelongsTo

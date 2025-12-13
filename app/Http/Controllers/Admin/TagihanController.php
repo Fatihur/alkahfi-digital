@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\KategoriTagihan;
 use App\Models\Kelas;
 use App\Models\LogAktivitas;
 use App\Models\Santri;
@@ -14,7 +13,7 @@ class TagihanController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Tagihan::with(['santri', 'kategoriTagihan']);
+        $query = Tagihan::with(['santri']);
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -45,16 +44,14 @@ class TagihanController extends Controller
     {
         $santriList = Santri::where('status', 'aktif')->get();
         $kelasList = Kelas::where('is_active', true)->get();
-        $kategoriList = KategoriTagihan::where('is_active', true)->get();
 
-        return view('admin.tagihan.create', compact('santriList', 'kelasList', 'kategoriList'));
+        return view('admin.tagihan.create', compact('santriList', 'kelasList'));
     }
 
     public function store(Request $request)
     {
         $rules = [
             'tipe_tagihan' => ['required', 'in:individual,kelas'],
-            'kategori_tagihan_id' => ['nullable', 'exists:kategori_tagihan,id'],
             'nama_tagihan' => ['required', 'string', 'max:150'],
             'periode' => ['nullable', 'string', 'max:20'],
             'bulan' => ['nullable', 'integer', 'min:1', 'max:12'],
@@ -100,7 +97,6 @@ class TagihanController extends Controller
         foreach ($santriIds as $santriId) {
             Tagihan::create([
                 'santri_id' => $santriId,
-                'kategori_tagihan_id' => $request->kategori_tagihan_id ?: null,
                 'nama_tagihan' => $request->nama_tagihan,
                 'periode' => $request->periode,
                 'bulan' => $request->bulan,
@@ -125,14 +121,13 @@ class TagihanController extends Controller
 
     public function show(Tagihan $tagihan)
     {
-        $tagihan->load(['santri', 'kategoriTagihan', 'pembayaran', 'createdBy']);
+        $tagihan->load(['santri', 'pembayaran', 'createdBy']);
         return view('admin.tagihan.show', compact('tagihan'));
     }
 
     public function edit(Tagihan $tagihan)
     {
-        $kategoriList = KategoriTagihan::where('is_active', true)->get();
-        return view('admin.tagihan.edit', compact('tagihan', 'kategoriList'));
+        return view('admin.tagihan.edit', compact('tagihan'));
     }
 
     public function update(Request $request, Tagihan $tagihan)

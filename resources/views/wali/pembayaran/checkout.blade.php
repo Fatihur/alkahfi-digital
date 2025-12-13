@@ -134,10 +134,12 @@
             });
         }
 
-        function checkStatus() {
+        function checkStatus(showAlert = true) {
             const btn = document.getElementById('checkBtn');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Mengecek...';
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Mengecek...';
+            }
 
             fetch('{{ route("wali.pembayaran.verify", $pembayaran->id) }}', {
                 method: 'POST',
@@ -151,16 +153,32 @@
                 if (data.success && data.data.pembayaran_status === 'berhasil') {
                     window.location.reload();
                 } else {
-                    btn.disabled = false;
-                    btn.innerHTML = '<i class="bi bi-arrow-clockwise"></i> Cek Status Pembayaran';
-                    alert('Status pembayaran: ' + (data.data?.pembayaran_status || 'pending'));
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerHTML = '<i class="bi bi-arrow-clockwise"></i> Cek Status Pembayaran';
+                    }
+                    if (showAlert) {
+                        alert('Status pembayaran: ' + (data.data?.pembayaran_status || 'pending'));
+                    }
                 }
             })
             .catch(error => {
-                btn.disabled = false;
-                btn.innerHTML = '<i class="bi bi-arrow-clockwise"></i> Cek Status Pembayaran';
-                alert('Gagal mengecek status pembayaran');
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="bi bi-arrow-clockwise"></i> Cek Status Pembayaran';
+                }
+                if (showAlert) {
+                    alert('Gagal mengecek status pembayaran');
+                }
             });
         }
+
+        // Auto-check status saat halaman dimuat (jika status masih pending)
+        @if($pembayaran->status === 'pending')
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cek status otomatis tanpa alert
+            checkStatus(false);
+        });
+        @endif
     </script>
 @endsection

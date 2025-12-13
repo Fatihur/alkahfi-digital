@@ -97,8 +97,19 @@ class PembayaranController extends Controller
     {
         $this->authorizePembayaran($pembayaran);
 
+        // Auto-verify status jika masih pending
+        if ($pembayaran->status === 'pending') {
+            try {
+                $this->duitkuService->verifyPayment($pembayaran);
+                $pembayaran->refresh();
+            } catch (\Exception $e) {
+                // Ignore error, continue showing checkout page
+            }
+        }
+
         if ($pembayaran->status === 'berhasil') {
-            return redirect()->route('wali.pembayaran.show', $pembayaran->id);
+            return redirect()->route('wali.pembayaran.show', $pembayaran->id)
+                ->with('success', 'Pembayaran berhasil!');
         }
 
         $pembayaran->load(['santri', 'tagihan']);
@@ -113,6 +124,28 @@ class PembayaranController extends Controller
 
         $pembayaran->load(['santri', 'tagihan']);
         return view('wali.pembayaran.konfirmasi', compact('pembayaran'));
+    }
+
+    public function paymentReturn(Pembayaran $pembayaran)
+    {
+        $this->authorizePembayaran($pembayaran);
+
+        // Auto-verify status dari payment gateway
+        if ($pembayaran->status === 'pending') {
+            try {
+                $this->duitkuService->verifyPayment($pembayaran);
+                $pembayaran->refresh();
+            } catch (\Exception $e) {
+                // Ignore error
+            }
+        }
+
+        if ($pembayaran->status === 'berhasil') {
+            return redirect()->route('wali.pembayaran.show', $pembayaran->id)
+                ->with('success', 'Pembayaran berhasil! Terima kasih.');
+        }
+
+        return redirect()->route('wali.pembayaran.checkout', $pembayaran->id);
     }
 
     public function verify(Pembayaran $pembayaran)

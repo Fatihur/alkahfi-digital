@@ -147,6 +147,7 @@ Route::middleware(['auth', 'check.active'])->group(function () {
         Route::get('/bayar/{tagihan}', [WaliPembayaranController::class, 'bayar'])->name('pembayaran.bayar');
         Route::post('/bayar/{tagihan}', [WaliPembayaranController::class, 'prosesBayar'])->name('pembayaran.proses');
         Route::get('/checkout/{pembayaran}', [WaliPembayaranController::class, 'checkout'])->name('pembayaran.checkout');
+        Route::get('/pembayaran/{pembayaran}/return', [WaliPembayaranController::class, 'paymentReturn'])->name('pembayaran.return');
         Route::post('/pembayaran/{pembayaran}/verify', [WaliPembayaranController::class, 'verify'])->name('pembayaran.verify');
         Route::get('/konfirmasi/{pembayaran}', [WaliPembayaranController::class, 'konfirmasi'])->name('pembayaran.konfirmasi');
         

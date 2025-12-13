@@ -58,7 +58,8 @@ class DuitkuService
         $phoneNumber = $wali?->no_hp ?? '';
         $customerVaName = substr($santri->nama_lengkap, 0, 20);
         $callbackUrl = Pengaturan::get('duitku_callback_url') ?: config('duitku.callback_url') ?: url('/api/duitku/callback');
-        $returnUrl = Pengaturan::get('duitku_return_url') ?: config('duitku.return_url') ?: route('wali.pembayaran.index');
+        // Return URL ke halaman return yang akan auto-verify status
+        $returnUrl = Pengaturan::get('duitku_return_url') ?: config('duitku.return_url') ?: route('wali.pembayaran.return', $pembayaran->id);
         $expiryPeriod = (int) (Pengaturan::get('duitku_expiry_period') ?: config('duitku.expiry_period', 1440));
 
         $signature = md5($this->merchantCode . $merchantOrderId . $paymentAmount . $this->apiKey);

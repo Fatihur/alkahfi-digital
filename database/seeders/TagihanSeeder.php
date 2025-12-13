@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\KategoriTagihan;
 use App\Models\Santri;
 use App\Models\Tagihan;
 use App\Models\User;
@@ -14,16 +13,10 @@ class TagihanSeeder extends Seeder
     public function run(): void
     {
         $santriList = Santri::where('status', 'aktif')->get();
-        $kategoriSPP = KategoriTagihan::where('nama_kategori', 'SPP Bulanan')->first();
         $admin = User::where('role', 'admin')->first();
 
         if ($santriList->isEmpty()) {
             $this->command->warn('Tidak ada santri aktif. Jalankan SantriSeeder terlebih dahulu.');
-            return;
-        }
-
-        if (!$kategoriSPP) {
-            $this->command->warn('Kategori SPP Bulanan tidak ditemukan.');
             return;
         }
 
@@ -33,7 +26,6 @@ class TagihanSeeder extends Seeder
         foreach ($santriList as $santri) {
             $tagihan = Tagihan::create([
                 'santri_id' => $santri->id,
-                'kategori_tagihan_id' => $kategoriSPP->id,
                 'nama_tagihan' => 'SPP Bulan Desember 2025',
                 'periode' => 'Desember 2025',
                 'bulan' => 12,
