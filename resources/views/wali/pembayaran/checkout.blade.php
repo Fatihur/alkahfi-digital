@@ -1,118 +1,166 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout - {{ config('app.name') }}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
-    @if(config('midtrans.is_production'))
-        <script src="https://app.midtrans.com/snap/snap.js" data-client-key="{{ $clientKey }}"></script>
-    @else
-        <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ $clientKey }}"></script>
-    @endif
-</head>
-<body style="background: var(--bg-body);">
-    <div style="max-width: 500px; margin: 50px auto; padding: 20px;">
-        <div class="card">
-            <div class="card-body" style="padding: 40px; text-align: center;">
-                <div style="width: 80px; height: 80px; background: var(--primary-subtle); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
-                    <i class="bi bi-credit-card" style="font-size: 2rem; color: var(--primary-color);"></i>
-                </div>
-                
-                <h2 style="margin-bottom: 10px;">Pembayaran SPP</h2>
-                <p class="text-muted">{{ $pembayaran->tagihan->nama_tagihan }}</p>
-                
-                <div style="background: var(--bg-body); padding: 20px; border-radius: 8px; margin: 20px 0;">
-                    <table class="table" style="margin: 0; text-align: left;">
+@extends('layouts.wali')
+
+@section('title', 'Detail Pembayaran')
+
+@section('content')
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Detail Pembayaran</h1>
+            <p class="page-subtitle">Informasi pembayaran Anda</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <div class="card">
+                <div     class="card-header"><h3 class="card-title">Informasi Transaksi</h3></div>
+                <div class="card-body">
+                    <table class="table">
+                        <tr><td><strong>No. Transaksi</strong></td><td><code>{{ $pembayaran->nomor_transaksi }}</code></td></tr>
+                        <tr><td><strong>Santri</strong></td><td>{{ $pembayaran->santri->nama_lengkap }}</td></tr>
+                        <tr><td><strong>NIS</strong></td><td>{{ $pembayaran->santri->nis }}</td></tr>
+                        <tr><td><strong>Tagihan</strong></td><td>{{ $pembayaran->tagihan->nama_tagihan }}</td></tr>
+                        <tr><td><strong>Metode</strong></td><td>{{ \App\Services\DuitkuService::getPaymentMethodName($pembayaran->channel_pembayaran) }}</td></tr>
                         <tr>
-                            <td>Santri</td>
-                            <td style="text-align: right;"><strong>{{ $pembayaran->santri->nama_lengkap }}</strong></td>
-                        </tr>
-                        <tr>
-                            <td>NIS</td>
-                            <td style="text-align: right;">{{ $pembayaran->santri->nis }}</td>
-                        </tr>
-                        <tr>
-                            <td>No. Transaksi</td>
-                            <td style="text-align: right;"><code>{{ $pembayaran->nomor_transaksi }}</code></td>
+                            <td><strong>Status</strong></td>
+                            <td>
+                                @switch($pembayaran->status)
+                                    @case('berhasil')
+                                        <span class="badge badge-success">Berhasil</span>
+                                        @break
+                                    @case('pending')
+                                        <span class="badge badge-warning">Menunggu Pembayaran</span>
+                                        @break
+                                    @case('gagal')
+                                        <span class="badge badge-danger">Gagal</span>
+                                        @break
+                                    @case('expired')
+                                        <span class="badge badge-secondary">Kadaluarsa</span>
+                                        @break
+                                @endswitch
+                            </td>
                         </tr>
                     </table>
-                </div>
 
-                <div style="background: var(--primary-subtle); padding: 20px; border-radius: 8px; margin: 20px 0;">
-                    <div style="font-size: 0.875rem; color: var(--text-muted);">Total Pembayaran</div>
-                    <div style="font-size: 2rem; font-weight: 700; color: var(--primary-color);">
-                        Rp {{ number_format($pembayaran->jumlah_bayar, 0, ',', '.') }}
-                    </div>
-                </div>
-
-                @if($snapToken)
-                    <button id="pay-button" class="btn btn-primary btn-lg w-100" style="padding: 16px;">
-                        <i class="bi bi-shield-check"></i> Bayar Sekarang
-                    </button>
-                @else
-                    <div class="alert alert-danger">
-                        <i class="bi bi-exclamation-circle"></i>
-                        Token pembayaran tidak valid. Silakan coba lagi.
-                    </div>
-                    <a href="{{ route('wali.tagihan.index') }}" class="btn btn-secondary">Kembali</a>
-                @endif
-
-                <div style="margin-top: 20px;">
-                    <a href="{{ route('wali.pembayaran.index') }}" class="btn btn-secondary">
-                        <i class="bi bi-arrow-left"></i> Kembali
-                    </a>
-                </div>
-
-                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border-color);">
-                    <p class="text-muted" style="font-size: 0.8rem;">
-                        <i class="bi bi-shield-lock"></i>
-                        Pembayaran diproses dengan aman oleh Midtrans
-                    </p>
-                    <div style="display: flex; justify-content: center; gap: 10px; margin-top: 10px;">
-                        <img src="https://midtrans.com/assets/images/logo/logo-mastercard.svg" alt="Mastercard" style="height: 24px;">
-                        <img src="https://midtrans.com/assets/images/logo/logo-visa.svg" alt="Visa" style="height: 24px;">
-                        <img src="https://midtrans.com/assets/images/logo/logo-gopay.svg" alt="GoPay" style="height: 24px;">
+                    <div style="background: var(--primary-subtle); padding: 20px; border-radius: 8px; text-align: center; margin-top: 20px;">
+                        <div style="font-size: 0.875rem; color: var(--text-muted);">Total Pembayaran</div>
+                        <div style="font-size: 2rem; font-weight: 700; color: var(--primary-color);">
+                            Rp {{ number_format($pembayaran->jumlah_bayar, 0, ',', '.') }}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header"><h3 class="card-title">Instruksi Pembayaran</h3></div>
+                <div class="card-body">
+                    @if($pembayaran->status === 'pending')
+                        @if(!empty($gatewayResponse['paymentUrl']))
+                            <div style="text-align: center; margin-bottom: 20px;">
+                                <p class="text-muted">Klik tombol di bawah untuk melanjutkan pembayaran:</p>
+                                <a href="{{ $gatewayResponse['paymentUrl'] }}" class="btn btn-primary btn-lg" target="_blank">
+                                    <i class="bi bi-credit-card"></i> Bayar Sekarang
+                                </a>
+                            </div>
+                        @endif
+
+                        @if(!empty($gatewayResponse['vaNumber']))
+                            <div style="background: var(--bg-body); padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                                <div style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 8px;">Nomor Virtual Account</div>
+                                <div style="font-size: 1.5rem; font-weight: 700; font-family: monospace; letter-spacing: 2px;">
+                                    {{ $gatewayResponse['vaNumber'] }}
+                                </div>
+                                <button onclick="copyToClipboard('{{ $gatewayResponse['vaNumber'] }}')" class="btn btn-sm btn-secondary mt-2">
+                                    <i class="bi bi-clipboard"></i> Salin
+                                </button>
+                            </div>
+                        @endif
+
+                        @if(!empty($gatewayResponse['qrString']))
+                            <div style="text-align: center; margin-bottom: 20px;">
+                                <div style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 8px;">Scan QR Code</div>
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={{ urlencode($gatewayResponse['qrString']) }}" alt="QR Code" style="max-width: 200px;">
+                            </div>
+                        @endif
+
+                        <div class="alert alert-warning">
+                            <i class="bi bi-clock"></i>
+                            <span>Selesaikan pembayaran sebelum batas waktu berakhir.</span>
+                        </div>
+
+                        <div style="margin-top: 20px;">
+                            <button onclick="checkStatus()" class="btn btn-secondary w-100" id="checkBtn">
+                                <i class="bi bi-arrow-clockwise"></i> Cek Status Pembayaran
+                            </button>
+                        </div>
+                    @elseif($pembayaran->status === 'berhasil')
+                        <div style="text-align: center;">
+                            <div style="width: 80px; height: 80px; background: rgba(16, 185, 129, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                                <i class="bi bi-check-circle" style="font-size: 2.5rem; color: var(--success-color);"></i>
+                            </div>
+                            <h3 style="color: var(--success-color);">Pembayaran Berhasil!</h3>
+                            <p class="text-muted">Terima kasih, pembayaran Anda telah diterima.</p>
+                            
+                            <a href="{{ route('wali.pembayaran.cetak', $pembayaran) }}" class="btn btn-primary mt-3" target="_blank">
+                                <i class="bi bi-printer"></i> Cetak Bukti Pembayaran
+                            </a>
+                        </div>
+                    @else
+                        <div style="text-align: center;">
+                            <div style="width: 80px; height: 80px; background: rgba(239, 68, 68, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                                <i class="bi bi-x-circle" style="font-size: 2.5rem; color: var(--danger-color);"></i>
+                            </div>
+                            <h3 style="color: var(--danger-color);">Pembayaran {{ $pembayaran->status === 'expired' ? 'Kadaluarsa' : 'Gagal' }}</h3>
+                            <p class="text-muted">Silakan coba lagi dengan membuat pembayaran baru.</p>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
+            <div class="text-center mt-3">
+                <a href="{{ route('wali.pembayaran.index') }}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Kembali ke Riwayat Pembayaran
+                </a>
+            </div>
+        </div>
     </div>
 
-    @if($snapToken)
     <script>
-        document.getElementById('pay-button').addEventListener('click', function() {
-            snap.pay('{{ $snapToken }}', {
-                onSuccess: function(result) {
-                    fetch('{{ route("wali.pembayaran.verify", $pembayaran->id) }}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        window.location.href = '{{ route("wali.pembayaran.index") }}?status=success';
-                    })
-                    .catch(error => {
-                        window.location.href = '{{ route("wali.pembayaran.index") }}?status=success';
-                    });
-                },
-                onPending: function(result) {
-                    window.location.href = '{{ route("wali.pembayaran.index") }}?status=pending';
-                },
-                onError: function(result) {
-                    window.location.href = '{{ route("wali.pembayaran.index") }}?status=error';
-                },
-                onClose: function() {
-                    console.log('Payment popup closed');
-                }
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                alert('Nomor VA berhasil disalin!');
             });
-        });
+        }
+
+        function checkStatus() {
+            const btn = document.getElementById('checkBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Mengecek...';
+
+            fetch('{{ route("wali.pembayaran.verify", $pembayaran->id) }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.data.pembayaran_status === 'berhasil') {
+                    window.location.reload();
+                } else {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="bi bi-arrow-clockwise"></i> Cek Status Pembayaran';
+                    alert('Status pembayaran: ' + (data.data?.pembayaran_status || 'pending'));
+                }
+            })
+            .catch(error => {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="bi bi-arrow-clockwise"></i> Cek Status Pembayaran';
+                alert('Gagal mengecek status pembayaran');
+            });
+        }
     </script>
-    @endif
-</body>
-</html>
+@endsection

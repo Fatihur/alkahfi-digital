@@ -32,48 +32,98 @@
         </div>
         <div class="col-6">
             <div class="card">
-                <div class="card-header"><h3 class="card-title">Metode Pembayaran</h3></div>
+                <div class="card-header"><h3 class="card-title">Pilih Metode Pembayaran</h3></div>
                 <div class="card-body">
-                    <form action="{{ route('wali.pembayaran.proses', $tagihan) }}" method="POST">
+                    <form action="{{ route('wali.pembayaran.proses', $tagihan) }}" method="POST" id="paymentForm">
                         @csrf
                         
                         <div style="background: var(--bg-body); padding: 16px; border-radius: 8px; margin-bottom: 20px;">
-                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
                                 <div style="width: 40px; height: 40px; background: var(--primary-subtle); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
                                     <i class="bi bi-shield-check" style="color: var(--primary-color); font-size: 1.25rem;"></i>
                                 </div>
                                 <div>
-                                    <div style="font-weight: 600;">Midtrans Payment Gateway</div>
+                                    <div style="font-weight: 600;">Duitku Payment Gateway</div>
                                     <div style="font-size: 0.8rem; color: var(--text-muted);">Pembayaran aman & terenkripsi</div>
                                 </div>
                             </div>
-                            <p style="font-size: 0.875rem; color: var(--text-muted); margin: 0;">
-                                Pilih metode pembayaran favorit Anda di halaman checkout. Tersedia berbagai pilihan:
-                            </p>
                         </div>
 
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px;">
-                            <div style="background: var(--bg-body); padding: 12px; border-radius: 8px; text-align: center;">
-                                <i class="bi bi-qr-code" style="font-size: 1.5rem; color: var(--primary-color);"></i>
-                                <div style="font-size: 0.8rem; margin-top: 4px;">QRIS</div>
+                        <div class="payment-methods" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+                            <div class="payment-group">
+                                <div style="font-weight: 600; font-size: 0.875rem; margin-bottom: 8px; color: var(--text-muted);">Virtual Account</div>
+                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                    <label class="payment-option">
+                                        <input type="radio" name="payment_method" value="BC" required>
+                                        <span class="payment-label"><i class="bi bi-bank"></i> BCA Virtual Account</span>
+                                    </label>
+                                    <label class="payment-option">
+                                        <input type="radio" name="payment_method" value="M2">
+                                        <span class="payment-label"><i class="bi bi-bank"></i> Mandiri Virtual Account</span>
+                                    </label>
+                                    <label class="payment-option">
+                                        <input type="radio" name="payment_method" value="I1">
+                                        <span class="payment-label"><i class="bi bi-bank"></i> BNI Virtual Account</span>
+                                    </label>
+                                    <label class="payment-option">
+                                        <input type="radio" name="payment_method" value="BR">
+                                        <span class="payment-label"><i class="bi bi-bank"></i> BRI Virtual Account</span>
+                                    </label>
+                                    <label class="payment-option">
+                                        <input type="radio" name="payment_method" value="BT">
+                                        <span class="payment-label"><i class="bi bi-bank"></i> Permata Virtual Account</span>
+                                    </label>
+                                </div>
                             </div>
-                            <div style="background: var(--bg-body); padding: 12px; border-radius: 8px; text-align: center;">
-                                <i class="bi bi-bank" style="font-size: 1.5rem; color: var(--primary-color);"></i>
-                                <div style="font-size: 0.8rem; margin-top: 4px;">Bank Transfer</div>
+
+                            <div class="payment-group" style="margin-top: 12px;">
+                                <div style="font-weight: 600; font-size: 0.875rem; margin-bottom: 8px; color: var(--text-muted);">E-Wallet</div>
+                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                    <label class="payment-option">
+                                        <input type="radio" name="payment_method" value="OV">
+                                        <span class="payment-label"><i class="bi bi-wallet2"></i> OVO</span>
+                                    </label>
+                                    <label class="payment-option">
+                                        <input type="radio" name="payment_method" value="DA">
+                                        <span class="payment-label"><i class="bi bi-wallet2"></i> DANA</span>
+                                    </label>
+                                    <label class="payment-option">
+                                        <input type="radio" name="payment_method" value="SA">
+                                        <span class="payment-label"><i class="bi bi-wallet2"></i> ShopeePay</span>
+                                    </label>
+                                    <label class="payment-option">
+                                        <input type="radio" name="payment_method" value="LF">
+                                        <span class="payment-label"><i class="bi bi-wallet2"></i> LinkAja</span>
+                                    </label>
+                                </div>
                             </div>
-                            <div style="background: var(--bg-body); padding: 12px; border-radius: 8px; text-align: center;">
-                                <i class="bi bi-wallet2" style="font-size: 1.5rem; color: var(--primary-color);"></i>
-                                <div style="font-size: 0.8rem; margin-top: 4px;">E-Wallet</div>
+
+                            <div class="payment-group" style="margin-top: 12px;">
+                                <div style="font-weight: 600; font-size: 0.875rem; margin-bottom: 8px; color: var(--text-muted);">Retail</div>
+                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                    <label class="payment-option">
+                                        <input type="radio" name="payment_method" value="IR">
+                                        <span class="payment-label"><i class="bi bi-shop"></i> Indomaret</span>
+                                    </label>
+                                    <label class="payment-option">
+                                        <input type="radio" name="payment_method" value="A1">
+                                        <span class="payment-label"><i class="bi bi-shop"></i> Alfamart</span>
+                                    </label>
+                                </div>
                             </div>
-                            <div style="background: var(--bg-body); padding: 12px; border-radius: 8px; text-align: center;">
-                                <i class="bi bi-credit-card" style="font-size: 1.5rem; color: var(--primary-color);"></i>
-                                <div style="font-size: 0.8rem; margin-top: 4px;">Kartu Kredit</div>
+
+                            <div class="payment-group" style="margin-top: 12px;">
+                                <div style="font-weight: 600; font-size: 0.875rem; margin-bottom: 8px; color: var(--text-muted);">QRIS</div>
+                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                    <label class="payment-option">
+                                        <input type="radio" name="payment_method" value="SP">
+                                        <span class="payment-label"><i class="bi bi-qr-code"></i> QRIS (Semua Aplikasi)</span>
+                                    </label>
+                                </div>
                             </div>
                         </div>
 
-                        <input type="hidden" name="channel" value="snap">
-
-                        <button type="submit" class="btn btn-primary w-100" style="padding: 14px;">
+                        <button type="submit" class="btn btn-primary w-100" style="padding: 14px;" id="submitBtn">
                             <i class="bi bi-lock"></i> Lanjutkan ke Pembayaran
                         </button>
                     </form>
@@ -86,11 +136,62 @@
 
                     <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color); text-align: center;">
                         <p class="text-muted" style="font-size: 0.75rem; margin: 0;">
-                            <i class="bi bi-shield-lock"></i> Transaksi dilindungi oleh sistem keamanan Midtrans
+                            <i class="bi bi-shield-lock"></i> Transaksi dilindungi oleh sistem keamanan Duitku
                         </p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <style>
+        .payment-option {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: var(--bg-body);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .payment-option:hover {
+            border-color: var(--primary-color);
+            background: var(--primary-subtle);
+        }
+        .payment-option input[type="radio"] {
+            margin-right: 12px;
+            accent-color: var(--primary-color);
+        }
+        .payment-option input[type="radio"]:checked + .payment-label {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        .payment-option:has(input:checked) {
+            border-color: var(--primary-color);
+            background: var(--primary-subtle);
+        }
+        .payment-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        .payment-label i {
+            font-size: 1.1rem;
+        }
+    </style>
+
+    <script>
+        document.getElementById('paymentForm').addEventListener('submit', function(e) {
+            const selected = document.querySelector('input[name="payment_method"]:checked');
+            if (!selected) {
+                e.preventDefault();
+                alert('Silakan pilih metode pembayaran');
+                return false;
+            }
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('submitBtn').innerHTML = '<i class="bi bi-hourglass-split"></i> Memproses...';
+        });
+    </script>
 @endsection

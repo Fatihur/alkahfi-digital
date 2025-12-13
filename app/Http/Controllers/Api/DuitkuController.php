@@ -3,22 +3,22 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Services\MidtransService;
+use App\Services\DuitkuService;
 use Illuminate\Http\Request;
 
-class MidtransController extends Controller
+class DuitkuController extends Controller
 {
-    protected MidtransService $midtransService;
+    protected DuitkuService $duitkuService;
 
-    public function __construct(MidtransService $midtransService)
+    public function __construct(DuitkuService $duitkuService)
     {
-        $this->midtransService = $midtransService;
+        $this->duitkuService = $duitkuService;
     }
 
-    public function notification(Request $request)
+    public function callback(Request $request)
     {
         try {
-            $result = $this->midtransService->handleNotification();
+            $result = $this->duitkuService->handleCallback($request->all());
 
             return response()->json($result);
         } catch (\Exception $e) {

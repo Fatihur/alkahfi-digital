@@ -98,6 +98,12 @@
 
     <div class="menu-label">Sistem</div>
     <div class="nav-item">
+        <a href="{{ route('admin.pengaturan.payment.index') }}" class="nav-link {{ request()->routeIs('admin.pengaturan.payment.*') ? 'active' : '' }}">
+            <i class="bi bi-gear"></i>
+            <span>Payment Gateway</span>
+        </a>
+    </div>
+    <div class="nav-item">
         <a href="{{ route('admin.log-aktivitas.index') }}" class="nav-link {{ request()->routeIs('admin.log-aktivitas.*') ? 'active' : '' }}">
             <i class="bi bi-clock-history"></i>
             <span>Log Aktivitas</span>

@@ -96,6 +96,11 @@ Route::middleware(['auth', 'check.active'])->group(function () {
         
         Route::get('/log-aktivitas', [LogAktivitasController::class, 'index'])->name('log-aktivitas.index');
         
+        // Pengaturan Payment Gateway
+        Route::get('/pengaturan/payment', [\App\Http\Controllers\Admin\PengaturanPaymentController::class, 'index'])->name('pengaturan.payment.index');
+        Route::put('/pengaturan/payment', [\App\Http\Controllers\Admin\PengaturanPaymentController::class, 'update'])->name('pengaturan.payment.update');
+        Route::post('/pengaturan/payment/test', [\App\Http\Controllers\Admin\PengaturanPaymentController::class, 'testConnection'])->name('pengaturan.payment.test');
+        
         // Landing Page Management
         Route::prefix('landing')->name('landing.')->group(function () {
             Route::get('/profil', [ProfilSekolahController::class, 'index'])->name('profil.index');

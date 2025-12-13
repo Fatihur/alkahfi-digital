@@ -18,7 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->validateCsrfTokens(except: [
-            'api/midtrans/*',
+            'api/duitku/*',
         ]);
 
         // Redirect authenticated users away from guest routes (login, register, etc.)

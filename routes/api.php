@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Api\MidtransController;
+use App\Http\Controllers\Api\DuitkuController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/midtrans/notification', [MidtransController::class, 'notification'])
-    ->name('midtrans.notification');
+Route::post('/duitku/callback', [DuitkuController::class, 'callback'])
+    ->name('duitku.callback');
