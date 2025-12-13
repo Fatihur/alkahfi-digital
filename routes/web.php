@@ -80,12 +80,10 @@ Route::middleware(['auth', 'check.active'])->group(function () {
         Route::resource('jurusan', JurusanController::class);
         Route::resource('tagihan', AdminTagihanController::class);
         
+        // Pembayaran admin hanya read-only (lihat saja)
         Route::get('/pembayaran', [AdminPembayaranController::class, 'index'])->name('pembayaran.index');
-        Route::get('/pembayaran/create', [AdminPembayaranController::class, 'create'])->name('pembayaran.create');
-        Route::post('/pembayaran', [AdminPembayaranController::class, 'store'])->name('pembayaran.store');
         Route::get('/pembayaran/{pembayaran}', [AdminPembayaranController::class, 'show'])->name('pembayaran.show');
         Route::get('/pembayaran/{pembayaran}/cetak', [AdminPembayaranController::class, 'cetakBukti'])->name('pembayaran.cetak');
-        Route::get('/pembayaran/tagihan/{santri}', [AdminPembayaranController::class, 'getTagihanBySantri'])->name('pembayaran.tagihan');
         
         Route::resource('pengumuman', PengumumanController::class);
 

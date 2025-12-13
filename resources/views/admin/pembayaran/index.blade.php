@@ -5,13 +5,8 @@
 @section('content')
     <div class="page-header">
         <div>
-            <h1 class="page-title">Manajemen Pembayaran</h1>
-            <p class="page-subtitle">Kelola pembayaran SPP santri.</p>
-        </div>
-        <div>
-            <a href="{{ route('admin.pembayaran.create') }}" class="btn btn-primary">
-                <i class="bi bi-plus"></i> Input Pembayaran Manual
-            </a>
+            <h1 class="page-title">Riwayat Pembayaran</h1>
+            <p class="page-subtitle">Lihat riwayat pembayaran SPP santri.</p>
         </div>
     </div>
 

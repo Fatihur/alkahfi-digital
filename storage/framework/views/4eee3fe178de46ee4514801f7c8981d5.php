@@ -41,6 +41,12 @@
 
     <div class="menu-label">Keuangan</div>
     <div class="nav-item">
+        <a href="<?php echo e(route('admin.pembayaran.index')); ?>" class="nav-link <?php echo e(request()->routeIs('admin.pembayaran.*') ? 'active' : ''); ?>">
+            <i class="bi bi-credit-card"></i>
+            <span>Pembayaran</span>
+        </a>
+    </div>
+    <div class="nav-item">
         <a href="<?php echo e(route('admin.laporan.index')); ?>" class="nav-link <?php echo e(request()->routeIs('admin.laporan.*') ? 'active' : ''); ?>">
             <i class="bi bi-file-earmark-bar-graph"></i>
             <span>Laporan</span>
