@@ -267,35 +267,38 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 6px 12px;
+            padding: 4px 10px 4px 4px;
             background: var(--bg-body);
             border: 1px solid var(--border-color);
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.2s ease;
+            flex-shrink: 0;
         }
         .user-dropdown-toggle:hover {
             background: var(--primary-subtle);
             border-color: var(--primary-color);
         }
         .user-dropdown-avatar {
-            width: 32px;
-            height: 32px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
+            flex-shrink: 0;
         }
         .user-dropdown-name {
-            font-size: 0.875rem;
+            font-size: 0.8125rem;
             font-weight: 500;
             color: var(--text-main);
-            max-width: 120px;
+            max-width: 100px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
         .user-dropdown-toggle i {
-            font-size: 0.75rem;
+            font-size: 0.625rem;
             color: var(--text-muted);
             transition: transform 0.2s ease;
+            flex-shrink: 0;
         }
         .user-dropdown.show .user-dropdown-toggle i {
             transform: rotate(180deg);
