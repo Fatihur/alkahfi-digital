@@ -153,7 +153,11 @@
         </div>
     </main>
 
-    <button class="btn-icon mobile-toggle" id="mobileToggle" style="position: fixed; bottom: 20px; right: 20px; background: var(--primary-color); color: white; width: 48px; height: 48px; border-radius: 50%; display: none; z-index: 100; box-shadow: 0 4px 12px rgba(79,70,229,0.3);">
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
+    <!-- Mobile FAB Toggle -->
+    <button class="mobile-fab-toggle" id="mobileFabToggle">
         <i class="bi bi-list"></i>
     </button>
 
@@ -396,7 +400,86 @@
             }
         }
         
-        @media(max-width: 768px) { .mobile-toggle { display: flex !important; } }
+        /* Mobile FAB Toggle */
+        .mobile-fab-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+            cursor: pointer;
+            z-index: 998;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        .mobile-fab-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.5);
+        }
+        .mobile-fab-toggle:active {
+            transform: scale(0.95);
+        }
+        
+        /* Sidebar Overlay */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .sidebar-overlay.show {
+            display: block;
+            opacity: 1;
+        }
+        
+        @media(max-width: 768px) { 
+            .mobile-fab-toggle { display: flex; }
+            
+            /* Responsive navbar actions */
+            .navbar-actions {
+                gap: 4px;
+            }
+            .btn-icon {
+                width: 32px;
+                height: 32px;
+            }
+            
+            /* Hide sidebar toggle on mobile (use FAB instead) */
+            #sidebarToggle { display: none; }
+        }
+        
+        @media(max-width: 576px) {
+            .mobile-fab-toggle {
+                width: 48px;
+                height: 48px;
+                font-size: 1.25rem;
+                bottom: 16px;
+                right: 16px;
+            }
+            
+            /* Notification dropdown responsive */
+            .notification-menu {
+                width: 280px;
+                right: -60px;
+            }
+            
+            /* User dropdown responsive */
+            .user-dropdown-menu {
+                width: 240px;
+                right: -20px;
+            }
+        }
         
         /* Pagination Styles */
         nav[role="navigation"] {
@@ -746,6 +829,68 @@
         .btn-success:hover {
             background: #059669;
         }
+        
+        /* DataTables Mobile Responsive */
+        @media (max-width: 768px) {
+            .dataTables_wrapper .dataTables_length,
+            .dataTables_wrapper .dataTables_filter {
+                float: none;
+                text-align: left;
+                margin-bottom: 12px;
+            }
+            
+            .dataTables_wrapper .dataTables_filter {
+                margin-top: 8px;
+            }
+            
+            .dataTables_wrapper .dataTables_filter input {
+                width: 100%;
+                min-width: auto;
+                margin-left: 0;
+                margin-top: 8px;
+            }
+            
+            .dataTables_wrapper .dataTables_info {
+                float: none;
+                text-align: center;
+                font-size: 0.75rem;
+            }
+            
+            .dataTables_wrapper .dataTables_paginate {
+                float: none;
+                text-align: center;
+                margin-top: 12px;
+            }
+            
+            .dataTables_wrapper .dataTables_paginate .paginate_button {
+                padding: 4px 8px !important;
+                margin: 0 2px !important;
+                font-size: 0.75rem;
+            }
+            
+            table.dataTable thead th {
+                padding: 10px 8px !important;
+                font-size: 0.6875rem;
+            }
+            
+            table.dataTable tbody td {
+                padding: 10px 8px !important;
+                font-size: 0.8125rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .dataTables_wrapper .dataTables_paginate .paginate_button {
+                padding: 3px 6px !important;
+                font-size: 0.6875rem;
+            }
+            
+            /* Hide some pagination buttons on very small screens */
+            .dataTables_wrapper .dataTables_paginate .paginate_button.first,
+            .dataTables_wrapper .dataTables_paginate .paginate_button.last {
+                display: none;
+            }
+        }
     </style>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -777,6 +922,55 @@
             const userDropdown = document.querySelector('.user-dropdown');
             if (userDropdown && !userDropdown.contains(e.target)) {
                 userDropdown.classList.remove('show');
+            }
+        });
+
+        // Mobile Sidebar Toggle
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const mobileFabToggle = document.getElementById('mobileFabToggle');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        
+        function openMobileSidebar() {
+            sidebar.classList.add('show');
+            sidebarOverlay.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeMobileSidebar() {
+            sidebar.classList.remove('show');
+            sidebarOverlay.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+        
+        if (mobileFabToggle) {
+            mobileFabToggle.addEventListener('click', function() {
+                if (sidebar.classList.contains('show')) {
+                    closeMobileSidebar();
+                } else {
+                    openMobileSidebar();
+                }
+            });
+        }
+        
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', closeMobileSidebar);
+        }
+        
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    openMobileSidebar();
+                } else {
+                    sidebar.classList.toggle('collapsed');
+                }
+            });
+        }
+        
+        // Close sidebar on window resize if open
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                closeMobileSidebar();
             }
         });
 
