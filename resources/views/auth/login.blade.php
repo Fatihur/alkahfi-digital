@@ -78,7 +78,7 @@
 
     <style>
         .login-page { display: flex; min-height: 100vh; }
-        .login-left { flex: 1; background: url('{{ asset('login.jpg') }}') center/cover no-repeat; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; color: white; position: relative; }
+        .login-left { flex: 1; background: url('{{ asset('loginbg.jpg') }}') center/cover no-repeat; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; color: white; position: relative; }
         .login-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(79, 70, 229, 0.6) 0%, rgba(124, 58, 237, 0.6) 100%); }
         .login-left-content { position: relative; z-index: 1; text-align: center; max-width: 480px; }
         .login-left h2 { font-size: 2.5rem; margin-bottom: 20px; font-weight: 700; line-height: 1.2; text-shadow: 0 2px 10px rgba(0,0,0,0.2); }
