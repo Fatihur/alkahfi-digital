@@ -54,7 +54,7 @@ class SantriSeeder extends Seeder
                 'nis' => $data['nis'],
                 'nama_lengkap' => $data['nama_lengkap'],
                 'jenis_kelamin' => $data['jenis_kelamin'],
-                'tempat_lahir' => $data['tempat_lahir'],
+                'tempat_lahir' => $data['tempat_lahir'],    
                 'tanggal_lahir' => $data['tanggal_lahir'],
                 'alamat' => $data['alamat'],
                 'kelas_id' => $kelasList[$kelasIndex]->id,
