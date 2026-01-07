@@ -38,15 +38,6 @@ class LaporanController extends Controller
         $pembayaran = $query->latest('tanggal_bayar')->get();
         $totalPembayaran = $pembayaran->sum('jumlah_bayar');
 
-        if ($request->filled('export')) {
-            if ($request->export === 'excel') {
-                return $this->exportTransaksiExcel($pembayaran, $totalPembayaran);
-            }
-            if ($request->export === 'pdf') {
-                return $this->exportTransaksiPdf($pembayaran, $totalPembayaran, $request);
-            }
-        }
-
         return view('admin.laporan.transaksi', compact('pembayaran', 'totalPembayaran'));
     }
 
@@ -71,10 +62,6 @@ class LaporanController extends Controller
 
         $tagihan = $query->orderBy('tanggal_jatuh_tempo')->get();
         $totalTunggakan = $tagihan->sum('total_bayar');
-
-        if ($request->filled('export') && $request->export === 'pdf') {
-            return $this->exportTunggakanPdf($tagihan, $totalTunggakan);
-        }
 
         return view('admin.laporan.tunggakan', compact('tagihan', 'totalTunggakan'));
     }
@@ -102,10 +89,6 @@ class LaporanController extends Controller
             ];
         }
 
-        if ($request->filled('export') && $request->export === 'pdf') {
-            return $this->exportRekapitulasiPdf($rekapBulanan, $tahun);
-        }
-
         return view('admin.laporan.rekapitulasi', compact('rekapBulanan', 'tahun'));
     }
 
@@ -118,65 +101,5 @@ class LaporanController extends Controller
             10 => 'Oktober', 11 => 'November', 12 => 'Desember'
         ];
         return $namaBulan[$bulan] ?? '';
-    }
-
-    protected function exportTransaksiExcel($pembayaran, $totalPembayaran)
-    {
-        $filename = 'laporan_transaksi_' . date('Y-m-d_His') . '.csv';
-
-        $headers = [
-            'Content-Type' => 'text/csv',
-            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
-        ];
-
-        $callback = function () use ($pembayaran, $totalPembayaran) {
-            $file = fopen('php://output', 'w');
-            fputcsv($file, ['No', 'Nomor Transaksi', 'Nama Santri', 'NIS', 'Tagihan', 'Jumlah Bayar', 'Metode', 'Tanggal']);
-
-            foreach ($pembayaran as $index => $p) {
-                fputcsv($file, [
-                    $index + 1,
-                    $p->nomor_transaksi,
-                    $p->santri->nama_lengkap,
-                    $p->santri->nis,
-                    $p->tagihan->nama_tagihan,
-                    $p->jumlah_bayar,
-                    $p->metode_pembayaran,
-                    $p->tanggal_bayar->format('d/m/Y H:i'),
-                ]);
-            }
-            fputcsv($file, []);
-            fputcsv($file, ['', '', '', '', 'TOTAL', $totalPembayaran, '', '']);
-            fclose($file);
-        };
-
-        return response()->stream($callback, 200, $headers);
-    }
-
-    protected function exportTransaksiPdf($pembayaran, $totalPembayaran, $request)
-    {
-        $tanggalDari = $request->tanggal_dari ? date('d/m/Y', strtotime($request->tanggal_dari)) : '-';
-        $tanggalSampai = $request->tanggal_sampai ? date('d/m/Y', strtotime($request->tanggal_sampai)) : '-';
-
-        $pdf = Pdf::loadView('admin.laporan.pdf.transaksi', compact('pembayaran', 'totalPembayaran', 'tanggalDari', 'tanggalSampai'));
-        $pdf->setPaper('a4', 'landscape');
-
-        return $pdf->download('laporan_transaksi_' . date('Y-m-d_His') . '.pdf');
-    }
-
-    protected function exportTunggakanPdf($tagihan, $totalTunggakan)
-    {
-        $pdf = Pdf::loadView('admin.laporan.pdf.tunggakan', compact('tagihan', 'totalTunggakan'));
-        $pdf->setPaper('a4', 'landscape');
-
-        return $pdf->download('laporan_tunggakan_' . date('Y-m-d_His') . '.pdf');
-    }
-
-    protected function exportRekapitulasiPdf($rekapBulanan, $tahun)
-    {
-        $pdf = Pdf::loadView('admin.laporan.pdf.rekapitulasi', compact('rekapBulanan', 'tahun'));
-        $pdf->setPaper('a4', 'portrait');
-
-        return $pdf->download('laporan_rekapitulasi_' . $tahun . '_' . date('Y-m-d_His') . '.pdf');
     }
 }

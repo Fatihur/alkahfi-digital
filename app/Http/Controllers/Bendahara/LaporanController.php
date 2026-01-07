@@ -155,7 +155,7 @@ class LaporanController extends Controller
         $tanggalDari = $request->tanggal_dari ? date('d/m/Y', strtotime($request->tanggal_dari)) : '-';
         $tanggalSampai = $request->tanggal_sampai ? date('d/m/Y', strtotime($request->tanggal_sampai)) : '-';
 
-        $pdf = Pdf::loadView('admin.laporan.pdf.transaksi', compact('pembayaran', 'totalPembayaran', 'tanggalDari', 'tanggalSampai'));
+        $pdf = Pdf::loadView('bendahara.laporan.pdf.transaksi', compact('pembayaran', 'totalPembayaran', 'tanggalDari', 'tanggalSampai'));
         $pdf->setPaper('a4', 'landscape');
 
         return $pdf->download('laporan_transaksi_' . date('Y-m-d_His') . '.pdf');
@@ -163,7 +163,7 @@ class LaporanController extends Controller
 
     protected function exportTunggakanPdf($tagihan, $totalTunggakan)
     {
-        $pdf = Pdf::loadView('admin.laporan.pdf.tunggakan', compact('tagihan', 'totalTunggakan'));
+        $pdf = Pdf::loadView('bendahara.laporan.pdf.tunggakan', compact('tagihan', 'totalTunggakan'));
         $pdf->setPaper('a4', 'landscape');
 
         return $pdf->download('laporan_tunggakan_' . date('Y-m-d_His') . '.pdf');
@@ -171,7 +171,7 @@ class LaporanController extends Controller
 
     protected function exportRekapitulasiPdf($rekapBulanan, $tahun)
     {
-        $pdf = Pdf::loadView('admin.laporan.pdf.rekapitulasi', compact('rekapBulanan', 'tahun'));
+        $pdf = Pdf::loadView('bendahara.laporan.pdf.rekapitulasi', compact('rekapBulanan', 'tahun'));
         $pdf->setPaper('a4', 'portrait');
 
         return $pdf->download('laporan_rekapitulasi_' . $tahun . '_' . date('Y-m-d_His') . '.pdf');

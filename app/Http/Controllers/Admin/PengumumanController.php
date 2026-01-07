@@ -28,6 +28,12 @@ class PengumumanController extends Controller
         return view('admin.pengumuman.create');
     }
 
+    public function show(Pengumuman $pengumuman)
+    {
+        $pengumuman->load('createdBy');
+        return view('admin.pengumuman.show', compact('pengumuman'));
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([

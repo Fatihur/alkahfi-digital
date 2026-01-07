@@ -44,6 +44,9 @@
                             </td>
                             <td>
                                 <div class="btn-group">
+                                    <a href="{{ route('admin.pengumuman.show', $p) }}" class="btn btn-sm btn-info" title="Detail">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
                                     <a href="{{ route('admin.pengumuman.edit', $p) }}" class="btn btn-sm btn-secondary" title="Edit">
                                         <i class="bi bi-pencil"></i>
                                     </a>

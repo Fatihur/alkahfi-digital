@@ -32,6 +32,12 @@ class KegiatanController extends Controller
         return view('admin.kegiatan.create');
     }
 
+    public function show(Kegiatan $kegiatan)
+    {
+        $kegiatan->load('createdBy');
+        return view('admin.kegiatan.show', compact('kegiatan'));
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([

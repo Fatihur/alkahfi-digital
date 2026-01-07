@@ -4,8 +4,10 @@
 
 @section('content')
     <div class="page-header">
-        <div><h1 class="page-title">Laporan Tunggakan</h1><p class="page-subtitle">Daftar santri dengan tagihan belum dibayar.</p></div>
-        <a href="{{ route('admin.laporan.tunggakan', array_merge(request()->all(), ['export' => 'pdf'])) }}" class="btn btn-danger"><i class="bi bi-file-earmark-pdf"></i> Export PDF</a>
+        <div>
+            <h1 class="page-title">Laporan Tunggakan</h1>
+            <p class="page-subtitle">Total: <strong>Rp {{ number_format($totalTunggakan, 0, ',', '.') }}</strong></p>
+        </div>
     </div>
 
     <div class="card">
