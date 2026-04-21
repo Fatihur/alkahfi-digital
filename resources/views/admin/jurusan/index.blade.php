@@ -1,8 +1,17 @@
+{{-- ===================================================== --}}
+{{-- FILE: index.blade.php (Jurusan) --}}
+{{-- DESKRIPSI: Tabel daftar jurusan dengan kode dan jumlah santri --}}
+{{-- LOKASI: resources/views/admin/jurusan/index.blade.php --}}
+{{-- CONTROLLER: Admin/JurusanController@index --}}
+{{-- ROUTE: GET /admin/jurusan --}}
+{{-- ===================================================== --}}
+
 @extends('layouts.admin')
 
 @section('title', 'Manajemen Jurusan')
 
 @section('content')
+    {{-- Header halaman --}}
     <div class="page-header">
         <div>
             <h1 class="page-title">Manajemen Jurusan</h1>
@@ -30,6 +39,7 @@
                 <tbody>
                     @foreach($jurusan as $j)
                         <tr>
+                            {{-- Kode jurusan dengan default '-' --}}
                             <td>{{ $j->kode_jurusan ?? '-' }}</td>
                             <td>{{ $j->nama_jurusan }}</td>
                             <td>{{ $j->santri_count }} santri</td>
@@ -66,7 +76,7 @@
 <script>
     $(document).ready(function() {
         $('#dataTable').DataTable({
-            order: [[1, 'asc']],
+            order: [[1, 'asc']],  // Urutkan berdasarkan nama jurusan
             columnDefs: [
                 { orderable: false, targets: -1 }
             ]

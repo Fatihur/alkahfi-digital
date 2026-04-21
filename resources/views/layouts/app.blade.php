@@ -1,23 +1,48 @@
+{{-- ===================================================== --}}
+{{-- FILE: app.blade.php (MAIN LAYOUT) --}}
+{{-- DESKRIPSI: Master layout untuk semua halaman admin --}}
+{{--          Berisi struktur HTML, sidebar, navbar --}}
+{{-- LOKASI: resources/views/layouts/app.blade.php --}}
+{{-- ===================================================== --}}
+
 <!DOCTYPE html>
+{{-- data-theme="light": Atribut untuk toggle dark/light mode --}}
 <html lang="id" data-theme="light">
 <head>
+    {{-- Metadata dasar --}}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{-- CSRF Token untuk keamanan form --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    {{-- Title dinamis: mengambil dari section 'title' atau default 'Dashboard' --}}
     <title>@yield('title', 'Dashboard') - {{ config('app.name') }}</title>
+    
+    {{-- Google Fonts - Font Inter (weights: 400,500,600,700) --}}
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    {{-- Bootstrap Icons - Library ikon (bi bi-*) --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    {{-- DataTables CSS - Styling untuk tabel interaktif --}}
     <link href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" rel="stylesheet">
+    {{-- CSS Custom aplikasi --}}
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    {{-- Stack untuk CSS tambahan dari child view --}}
     @stack('styles')
 </head>
+
+{{-- Ambil data profil sekolah untuk logo di sidebar --}}
 @php
     $profilSekolah = \App\Models\ProfilSekolah::first();
 @endphp
+
 <body>
+    {{-- ===================================================== --}}
+    {{-- SIDEBAR - Menu Navigasi Kiri --}}
+    {{-- ===================================================== --}}
     <aside class="sidebar" id="sidebar">
+        {{-- Header Sidebar dengan Logo --}}
         <div class="sidebar-header">
             <a href="#" class="sidebar-logo">
+                {{-- Tampilkan logo dari database jika ada, else logo default --}}
                 @if($profilSekolah && $profilSekolah->logo)
                     <img src="{{ Storage::url($profilSekolah->logo) }}" alt="Logo" class="sidebar-logo-img">
                 @else

@@ -1,15 +1,49 @@
+{{--
+================================================================================
+FILE        : index.blade.php
+DESKRIPSI   : Halaman utama/beranda landing page sekolah
+              Menampilkan slider hero, layanan, tentang kami, sambutan kepala 
+              sekolah, berita terbaru, dan galeri foto
+LOKASI      : resources/views/landing/index.blade.php
+CONTROLLER  : LandingController@index
+ROUTE       : GET / (landing.index)
+================================================================================
+
+CONTOH MODIFIKASI STYLING:
+- Tinggi slider: style="height: 800px;"
+- Warna overlay: style="background: rgba(0,0,0,.5);"
+- Shadow card: tambahkan class "shadow-lg"
+================================================================================
+--}}
+
+{{-- @extends: Menggunakan layout utama landing page --}}
+{{-- Lokasi layout: resources/views/layouts/landing.blade.php --}}
+{{-- Layout berisi: header, navbar, footer, dan assets CSS/JS --}}
 @extends('layouts.landing')
 
+{{-- @section('title'): Mendefinisikan judul halaman di browser tab --}}
+{{-- Mengambil nama sekolah dari variabel $profil dengan fallback --}}
 @section('title', 'Beranda - ' . ($profil->nama_sekolah ?? 'Sekolah'))
 
+{{-- @section('content'): Konten utama halaman yang di-render dalam layout --}}
 @section('content')
-    <!-- Carousel Start -->
+    {{-- ============================================ --}}
+    {{-- HERO SLIDER / CAROUSEL SECTION              --}}
+    {{-- ============================================ --}}
+    {{-- container-fluid p-0: Full width tanpa padding --}}
     <div class="container-fluid p-0 mb-5">
+        {{-- owl-carousel: Plugin jQuery untuk carousel --}}
         <div class="owl-carousel header-carousel position-relative">
+            
+            {{-- @if: Cek apakah ada data slider --}}
+            {{-- $sliders->count(): Menghitung jumlah slider --}}
             @if($sliders->count() > 0)
+                {{-- @foreach: Looping menampilkan setiap slider --}}
                 @foreach($sliders as $slider)
                 <div class="owl-carousel-item position-relative">
+                    {{-- Storage::url(): Generate URL file dari storage --}}
                     <img class="img-fluid" src="{{ Storage::url($slider->gambar) }}" alt="{{ $slider->judul }}" style="width: 100%; height: 600px; object-fit: cover;">
+                    {{-- Overlay gelap dengan posisi absolute --}}
                     <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center" style="background: rgba(24, 29, 56, .7);">
                         <div class="container">
                             <div class="row justify-content-start">
@@ -21,7 +55,6 @@
                                     @if($slider->deskripsi)
                                         <p class="fs-5 text-white mb-4 pb-2">{{ $slider->deskripsi }}</p>
                                     @endif
-
                                 </div>
                             </div>
                         </div>
@@ -29,7 +62,9 @@
                 </div>
                 @endforeach
             @else
+                {{-- Tampilan default jika tidak ada slider --}}
                 <div class="owl-carousel-item position-relative">
+                    {{-- asset(): Generate URL untuk file di folder public --}}
                     <img class="img-fluid" src="{{ asset('landing/img/carousel-1.jpg') }}" alt="" style="width: 100%; height: 600px; object-fit: cover;">
                     <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center" style="background: rgba(24, 29, 56, .7);">
                         <div class="container">
@@ -37,8 +72,8 @@
                                 <div class="col-sm-10 col-lg-8">
                                     <h5 class="text-primary text-uppercase mb-3 animated slideInDown">Selamat Datang</h5>
                                     <h1 class="display-3 text-white animated slideInDown">{{ $profil->nama_sekolah ?? 'Sekolah Kami' }}</h1>
+                                    {{-- Str::limit(): Membatasi jumlah karakter teks --}}
                                     <p class="fs-5 text-white mb-4 pb-2">{{ Str::limit($profil->visi ?? 'Mewujudkan generasi yang berilmu, berakhlak, dan berprestasi', 150) }}</p>
-
                                 </div>
                             </div>
                         </div>
@@ -47,15 +82,25 @@
             @endif
         </div>
     </div>
-    <!-- Carousel End -->
+    {{-- End Hero Slider --}}
 
-    <!-- Service Start -->
+    {{-- ============================================ --}}
+    {{-- SERVICES SECTION - 4 Layanan Unggulan       --}}
+    {{-- ============================================ --}}
+    {{-- container-xxl: Container extra large (max-width 1400px) --}}
+    {{-- py-5: Padding vertical 3rem --}}
     <div class="container-xxl py-5">
         <div class="container">
+            {{-- row g-4: Row dengan gutter/spasi antar kolom 1.5rem --}}
             <div class="row g-4">
+                {{-- col-lg-3: Kolom 3/12 (25%) pada layar large --}}
+                {{-- col-sm-6: Kolom 6/12 (50%) pada layar small --}}
+                {{-- wow fadeInUp: Animasi saat scroll dengan wow.js --}}
+                {{-- data-wow-delay: Delay animasi dalam detik --}}
                 <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
                     <div class="service-item text-center pt-3">
                         <div class="p-4">
+                            {{-- fa-3x: Font Awesome 3x size --}}
                             <i class="fa fa-3x fa-graduation-cap text-primary mb-4"></i>
                             <h5 class="mb-3">Tenaga Pengajar</h5>
                             <p>Pengajar profesional dan berpengalaman di bidangnya</p>
@@ -92,14 +137,19 @@
             </div>
         </div>
     </div>
-    <!-- Service End -->
+    {{-- End Services --}}
 
-    <!-- About Start -->
+    {{-- ============================================ --}}
+    {{-- ABOUT SECTION - Tentang Sekolah             --}}
+    {{-- ============================================ --}}
     <div class="container-xxl py-5">
         <div class="container">
+            {{-- row g-5: Row dengan gutter 3rem --}}
             <div class="row g-5">
+                {{-- Kolom gambar sekolah --}}
                 <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s" style="min-height: 400px;">
                     <div class="position-relative h-100">
+                        {{-- @if dengan null coalescing operator: Cek apakah foto tersedia --}}
                         @if($profil->foto_gedung ?? false)
                             <img class="img-fluid position-absolute w-100 h-100" src="{{ Storage::url($profil->foto_gedung) }}" alt="Gedung Sekolah" style="object-fit: cover;">
                         @else
@@ -107,19 +157,26 @@
                         @endif
                     </div>
                 </div>
+                {{-- Kolom teks tentang sekolah --}}
                 <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
+                    {{-- section-title: Class untuk styling subtitle --}}
                     <h6 class="section-title bg-white text-start text-primary pe-3">Tentang Kami</h6>
                     <h1 class="mb-4">Selamat Datang di {{ $profil->nama_sekolah ?? 'Sekolah Kami' }}</h1>
+                    {{-- Str::limit(): Membatasi teks sejarah maksimal 200 karakter --}}
                     <p class="mb-4">{{ Str::limit($profil->sejarah ?? 'Sekolah kami berkomitmen untuk memberikan pendidikan terbaik bagi generasi penerus bangsa.', 200) }}</p>
                     @if($profil->visi ?? false)
                         <p class="mb-4"><strong>Visi:</strong> {{ $profil->visi }}</p>
                     @endif
                     @if($profil->misi ?? false)
                         <div class="row gy-2 gx-4 mb-4">
+                            {{-- @php: Blade directive untuk menulis PHP --}}
+                            {{-- explode(): Memisahkan string berdasarkan newline --}}
                             @php
                                 $misiList = explode("\n", $profil->misi);
                             @endphp
+                            {{-- array_slice(): Mengambil maksimal 6 item misi --}}
                             @foreach(array_slice($misiList, 0, 6) as $misi)
+                                {{-- trim(): Menghapus whitespace di awal/akhir --}}
                                 @if(trim($misi))
                                     <div class="col-sm-6">
                                         <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>{{ Str::limit(trim($misi), 40) }}</p>
@@ -128,15 +185,19 @@
                             @endforeach
                         </div>
                     @endif
+                    {{-- route(): Generate URL dari named route --}}
                     <a class="btn btn-primary py-3 px-5 mt-2" href="{{ route('landing.profil') }}">Selengkapnya</a>
                 </div>
             </div>
         </div>
     </div>
-    <!-- About End -->
+    {{-- End About --}}
 
+    {{-- ============================================ --}}
+    {{-- KEPLA SEKOLAH SECTION                       --}}
+    {{-- ============================================ --}}
+    {{-- @if: Kondisi tampil jika data kepala sekolah ada --}}
     @if($profil->kepala_sekolah ?? false)
-    <!-- Kepala Sekolah Start -->
     <div class="container-xxl py-5">
         <div class="container">
             <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
@@ -163,18 +224,23 @@
             </div>
         </div>
     </div>
-    <!-- Kepala Sekolah End -->
     @endif
+    {{-- End Kepala Sekolah --}}
 
-    <!-- Berita Start -->
+    {{-- ============================================ --}}
+    {{-- BERITA TERBARU SECTION                      --}}
+    {{-- ============================================ --}}
     <div class="container-xxl py-5">
         <div class="container">
             <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
                 <h6 class="section-title bg-white text-center text-primary px-3">Informasi</h6>
                 <h1 class="mb-5">Berita Terbaru</h1>
             </div>
+            {{-- Cek apakah ada berita yang ditampilkan --}}
             @if($beritaTerbaru->count() > 0)
             <div class="row g-4 justify-content-center">
+                {{-- $loop->iteration: Nomor iterasi loop (1, 2, 3...) --}}
+                {{-- Digunakan untuk delay animasi yang berbeda --}}
                 @foreach($beritaTerbaru as $berita)
                 <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.{{ $loop->iteration }}s">
                     <div class="course-item bg-light">
@@ -185,13 +251,16 @@
                                 <img class="img-fluid" src="{{ asset('landing/img/course-1.jpg') }}" alt="" style="height: 200px; width: 100%; object-fit: cover;">
                             @endif
                             <div class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
+                                {{-- Parameter route: passing $berita->slug untuk detail --}}
                                 <a href="{{ route('landing.berita.detail', $berita->slug) }}" class="flex-shrink-0 btn btn-sm btn-primary px-3" style="border-radius: 30px;">Baca Selengkapnya</a>
                             </div>
                         </div>
                         <div class="text-center p-4 pb-0">
+                            {{-- badge: Komponen Bootstrap untuk label --}}
                             <span class="badge bg-primary mb-2">{{ $berita->kategori }}</span>
                             <h5 class="mb-4">{{ Str::limit($berita->judul, 50) }}</h5>
                         </div>
+                        {{-- d-flex: Display flex untuk layout horizontal --}}
                         <div class="d-flex border-top">
                             <small class="flex-fill text-center border-end py-2"><i class="fa fa-calendar text-primary me-2"></i>{{ $berita->tanggal_publikasi?->format('d M Y') }}</small>
                             <small class="flex-fill text-center py-2"><i class="fa fa-eye text-primary me-2"></i>{{ $berita->views }} views</small>
@@ -204,6 +273,7 @@
                 <a href="{{ route('landing.berita') }}" class="btn btn-primary py-3 px-5">Lihat Semua Berita</a>
             </div>
             @else
+            {{-- Tampilan jika tidak ada berita --}}
             <div class="text-center py-5">
                 <i class="fa fa-newspaper fa-4x text-muted mb-3"></i>
                 <p class="text-muted">Belum ada berita yang dipublikasikan.</p>
@@ -211,9 +281,12 @@
             @endif
         </div>
     </div>
-    <!-- Berita End -->
+    {{-- End Berita --}}
 
-    <!-- Galeri Start -->
+    {{-- ============================================ --}}
+    {{-- GALERI SECTION                              --}}
+    {{-- ============================================ --}}
+    {{-- category: Class tambahan untuk styling galeri --}}
     <div class="container-xxl py-5 category">
         <div class="container">
             <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
@@ -222,11 +295,16 @@
             </div>
             @if($galeriTerbaru->count() > 0)
             <div class="row g-3">
+                {{-- $index => $galeri: Mendapatkan index dan value --}}
+                {{-- take(5): Mengambil maksimal 5 item galeri --}}
                 @foreach($galeriTerbaru->take(5) as $index => $galeri)
+                    {{-- Hanya tampilkan layout khusus untuk index 0 --}}
                     @if($index == 0)
                     <div class="col-lg-7 col-md-6">
                         <div class="row g-3">
                             <div class="col-lg-12 col-md-12 wow zoomIn" data-wow-delay="0.1s">
+                                {{-- data-bs-toggle: Trigger Bootstrap modal --}}
+                                {{-- data-bs-target: Target modal yang akan dibuka --}}
                                 <a class="position-relative d-block overflow-hidden" href="{{ Storage::url($galeri->gambar) }}" data-bs-toggle="modal" data-bs-target="#galeriModal{{ $galeri->id }}">
                                     <img class="img-fluid" src="{{ Storage::url($galeri->gambar) }}" alt="{{ $galeri->judul }}" style="height: 217px; width: 100%; object-fit: cover;">
                                     <div class="bg-white text-center position-absolute bottom-0 end-0 py-2 px-3" style="margin: 1px;">
@@ -235,8 +313,10 @@
                                     </div>
                                 </a>
                             </div>
+                            {{-- Tampilkan item ke-2 jika ada --}}
                             @if($galeriTerbaru->count() > 1)
                             <div class="col-lg-6 col-md-12 wow zoomIn" data-wow-delay="0.3s">
+                                {{-- Null coalescing: Ambil item ke-1 atau null --}}
                                 @php $g = $galeriTerbaru[1] ?? null; @endphp
                                 @if($g)
                                 <a class="position-relative d-block overflow-hidden" href="{{ Storage::url($g->gambar) }}" data-bs-toggle="modal" data-bs-target="#galeriModal{{ $g->id }}">
@@ -249,6 +329,7 @@
                                 @endif
                             </div>
                             @endif
+                            {{-- Tampilkan item ke-3 jika ada --}}
                             @if($galeriTerbaru->count() > 2)
                             <div class="col-lg-6 col-md-12 wow zoomIn" data-wow-delay="0.5s">
                                 @php $g = $galeriTerbaru[2] ?? null; @endphp
@@ -265,6 +346,7 @@
                             @endif
                         </div>
                     </div>
+                    {{-- Tampilkan item ke-4 dengan layout berbeda --}}
                     @if($galeriTerbaru->count() > 3)
                     <div class="col-lg-5 col-md-6 wow zoomIn" data-wow-delay="0.7s" style="min-height: 350px;">
                         @php $g = $galeriTerbaru[3] ?? null; @endphp
@@ -293,15 +375,23 @@
             @endif
         </div>
     </div>
-    <!-- Galeri End -->
+    {{-- End Galeri --}}
 
-    <!-- Modal Galeri -->
+    {{-- ============================================ --}}
+    {{-- MODAL GALERI - Popup gambar besar           --}}
+    {{-- ============================================ --}}
+    {{-- @foreach: Generate modal untuk setiap galeri --}}
     @foreach($galeriTerbaru as $galeri)
+    {{-- modal fade: Komponen modal Bootstrap dengan efek fade --}}
+    {{-- tabindex="-1": Mencegah modal mendapatkan focus saat load --}}
     <div class="modal fade" id="galeriModal{{ $galeri->id }}" tabindex="-1">
+        {{-- modal-lg: Modal ukuran large --}}
+        {{-- modal-dialog-centered: Modal di tengah layar --}}
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">{{ $galeri->judul }}</h5>
+                    {{-- data-bs-dismiss="modal": Tombol tutup modal --}}
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body text-center">

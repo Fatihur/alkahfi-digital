@@ -1,3 +1,11 @@
+{{-- ===================================================== --}}
+{{-- FILE: create.blade.php (Jurusan) --}}
+{{-- DESKRIPSI: Form untuk menambah jurusan baru --}}
+{{-- LOKASI: resources/views/admin/jurusan/create.blade.php --}}
+{{-- CONTROLLER: Admin/JurusanController@create, @store --}}
+{{-- ROUTE: GET /admin/jurusan/create, POST /admin/jurusan --}}
+{{-- ===================================================== --}}
+
 @extends('layouts.admin')
 
 @section('title', 'Tambah Jurusan')
@@ -13,6 +21,8 @@
         <div class="card-body">
             <form action="{{ route('admin.jurusan.store') }}" method="POST">
                 @csrf
+                
+                {{-- Baris dengan 2 kolom --}}
                 <div class="row">
                     <div class="col-6">
                         <div class="form-group">
@@ -23,14 +33,17 @@
                     <div class="col-6">
                         <div class="form-group">
                             <label class="form-label">Kode Jurusan</label>
+                            {{-- Placeholder contoh kode jurusan umum --}}
                             <input type="text" name="kode_jurusan" class="form-control" value="{{ old('kode_jurusan') }}" placeholder="Contoh: IPA, IPS, TKJ">
                         </div>
                     </div>
                 </div>
+                
                 <div class="form-group">
                     <label class="form-label">Keterangan</label>
                     <textarea name="keterangan" class="form-control" rows="3">{{ old('keterangan') }}</textarea>
                 </div>
+                
                 <div class="d-flex gap-2">
                     <button type="submit" class="btn btn-primary"><i class="bi bi-check"></i> Simpan</button>
                     <a href="{{ route('admin.jurusan.index') }}" class="btn btn-secondary">Batal</a>
