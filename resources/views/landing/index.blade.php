@@ -167,13 +167,11 @@ CONTOH MODIFIKASI STYLING:
                     @if($profil->visi ?? false)
                         <p class="mb-4"><strong>Visi:</strong> {{ $profil->visi }}</p>
                     @endif
-                    @if($profil->misi ?? false)
+                    @php
+                        $misiList = !empty($profil->misi) ? preg_split('/\r\n|\r|\n/', $profil->misi) : [];
+                    @endphp
+                    @if(!empty($misiList))
                         <div class="row gy-2 gx-4 mb-4">
-                            {{-- @php: Blade directive untuk menulis PHP --}}
-                            {{-- explode(): Memisahkan string berdasarkan newline --}}
-                            @php
-                                $misiList = explode("\n", $profil->misi);
-                            @endphp
                             {{-- array_slice(): Mengambil maksimal 6 item misi --}}
                             @foreach(array_slice($misiList, 0, 6) as $misi)
                                 {{-- trim(): Menghapus whitespace di awal/akhir --}}

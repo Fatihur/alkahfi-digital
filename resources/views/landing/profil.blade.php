@@ -176,11 +176,10 @@ CONTOH MODIFIKASI STYLING:
                 <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
                     <h6 class="section-title bg-light text-start text-primary pe-3">Misi</h6>
                     <h1 class="mb-4">Misi Sekolah</h1>
-                    @if($profil->misi ?? false)
-                        {{-- PHP code untuk split misi berdasarkan baris --}}
-                        @php
-                            $misiList = explode("\n", $profil->misi);
-                        @endphp
+                    @php
+                        $misiList = !empty($profil->misi) ? preg_split('/\r\n|\r|\n/', $profil->misi) : [];
+                    @endphp
+                    @if(!empty($misiList))
                         {{-- list-unstyled: List tanpa bullet default --}}
                         <ul class="list-unstyled">
                             @foreach($misiList as $misi)
